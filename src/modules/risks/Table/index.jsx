@@ -13,6 +13,7 @@ function RiskTable({ data }) {
           <th scope="col">Fecha Desde</th>
           <th scope="col">Fecha Hasta</th>
           <th scope="col">Estado</th>
+          <th scope="col"></th>
         </tr>
       </thead>
       <tbody className="table-group-divider">
@@ -39,6 +40,13 @@ function RiskTable({ data }) {
                   style={{ color: "red", fontSize: "1.5rem" }}
                 ></i>
               )}
+            </td>
+            <td>
+              <div className="d-flex gap-2 mb-3">
+                <i class="bi bi-eye" style={{ fontSize: "1.5rem" }}></i>
+                <i class="bi bi-pencil" style={{ fontSize: "1.5rem" }}></i>
+                <i class="bi bi-trash3" style={{ fontSize: "1.5rem" }}></i>
+              </div>
             </td>
           </tr>
         ))}
