@@ -3,7 +3,7 @@ import Home from "./pages/Home";
 
 function App() {
   return (
-    <div class="container-fluid">
+    <div className="container-fluid">
       <Home />
     </div>
   );

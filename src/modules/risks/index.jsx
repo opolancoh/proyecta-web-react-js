@@ -6,7 +6,7 @@ function Risk() {
 
   useEffect(() => {
     async function fetchRisks() {
-      const response = await fetch("http://localhost:3030/risks");
+      const response = await fetch("http://localhost:5260/api/risks");
       const risksFetched = await response.json();
       setRisks(risksFetched);
     }
@@ -16,15 +16,15 @@ function Risk() {
 
   return (
     <>
-      <div class="row justify-content-between align-items-center">
-        <div class="col-11">
-          <div class="row">
+      <div className="row justify-content-between align-items-center">
+        <div className="col-11">
+          <div className="row">
             <h1>Riesgos</h1>
             <p>Gestión de riesgos</p>
           </div>
         </div>
-        <div class="col-1">
-          <button type="button" class="btn btn-primary">
+        <div className="col-1">
+          <button type="button" className="btn btn-primary">
             Nuevo
           </button>
         </div>
