@@ -31,9 +31,9 @@ function RiskTable({ data }) {
             <td className="text-center">
               <input
                 checked={x.state}
-                className="check-box"
-                disabled="disabled"
+                className="check-box"                
                 type="checkbox"
+                readonly
               ></input>
             </td>
             <td>
