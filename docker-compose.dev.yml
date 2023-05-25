@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  app:
+    image: proyecta_react
+    container_name: 'proyecta_react'
+    build:
+      context: .
+      # dockerfile: /Dockerfile.env
+    ports:
+      - "80:3000"
