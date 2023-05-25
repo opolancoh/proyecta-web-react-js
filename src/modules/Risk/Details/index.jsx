@@ -13,7 +13,6 @@ function RiskDetails() {
   useEffect(() => {
     async function fetchRisk() {
       const response = await fetch(`http://localhost:5260/api/risks/${riskId}`);
-      console.log("status code: ", response.status);
       if (response.status === 200) {
         const json = await response.json();
         setData(json);
@@ -49,7 +48,7 @@ function RiskDetails() {
         </div>
         <hr />
 
-        <form className="row g-3">
+        <div className="row g-3">
           <div className="col-md-12">
             <label className="form-label">Nombre</label>
             <label className="form-control">{data.name}</label>
@@ -97,14 +96,14 @@ function RiskDetails() {
                 className="form-check-input"
                 type="checkbox"
                 checked={data.state}
-                disabled
+                readonly
               />
               <label className="">
                 Estado ({data.state ? "Activo" : "Inactivo"})
               </label>
             </div>
           </div>
-        </form>
+        </div>
         <br />
         <dl className="row">
           <dt className="col-sm-1">Creado:</dt>
