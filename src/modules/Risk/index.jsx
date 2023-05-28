@@ -8,7 +8,7 @@ function RiskIndex() {
 
   useEffect(() => {
     async function fetchRisks() {
-      const response = await fetch("http://172.190.4.241:5100/api/risks");
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/risks`);
       const json = await response.json();
       setData(json);
       setIsLoading(false);
