@@ -12,7 +12,7 @@ function RiskDetails() {
 
   useEffect(() => {
     async function fetchRisk() {
-      const response = await fetch(`http://localhost:5100/api/risks/${riskId}`);
+      const response = await fetch(`http://172.190.4.241:5100/api/risks/${riskId}`);
       if (response.status === 200) {
         const json = await response.json();
         setData(json);
