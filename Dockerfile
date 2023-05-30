@@ -1,16 +1,23 @@
-# Fetching the node image on alpine linux
-FROM node:18-alpine AS development
+# Stage 1: Build React app
+FROM node:18-alpine AS build
 WORKDIR /app
-EXPOSE 3000
-ENV NODE_ENV development
+ENV NODE_ENV production
 
-# Install dependencies
+# Build
 COPY package.json /app
 COPY package-lock.json /app
 RUN npm ci
 
-# Copying all the files in our project
 COPY . .
 
-# Start the app
-CMD npm start
+RUN npm run build
+
+
+# Stage 2: Serve React app with Nginx
+FROM nginx:1.25.0-alpine as final
+EXPOSE 80
+
+COPY --from=build /app/build /usr/share/nginx/html
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+
+CMD ["nginx", "-g", "daemon off;"]
