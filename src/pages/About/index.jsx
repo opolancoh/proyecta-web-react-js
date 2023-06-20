@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import httpClient from '../../services/httpInterceptor';
 
 function About() {
   const [data, setData] = useState({});
@@ -9,11 +10,11 @@ function About() {
 
   useEffect(() => {
     async function fetchDotNetInfo() {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/info`);
-      if (response.status === 200) {
-        const json = await response.json();
-        setData(json);
-      } else if (response.status === 404) setData(null);
+      const { data } = await httpClient.get('/info', { isAnonymous: true });
+
+      if (data.status === 200) {
+        setData(data.d);
+      } else if (data.status === 404) setData(null);
       else {
         setRequestHasError(true);
       }
@@ -26,7 +27,7 @@ function About() {
   if (isLoading) return null;
 
   if (requestHasError) {
-    navigate("/error");
+    navigate('/error');
     return null;
   }
 
@@ -89,7 +90,7 @@ function About() {
               <td>{data.hostName}</td>
             </tr>
             <tr>
-              <td style={{ verticalAlign: "top" }}>Server IP address</td>
+              <td style={{ verticalAlign: 'top' }}>Server IP address</td>
               <td>
                 {data.ipList.map((x, index) => {
                   return <span key={index}>{x} </span>;

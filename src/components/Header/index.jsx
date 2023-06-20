@@ -32,6 +32,11 @@ function Header() {
                 </Link>
               </li>
               <li className="nav-item">
+                <Link className="nav-link text-dark" to="/users">
+                  Usuarios
+                </Link>
+              </li>
+              <li className="nav-item">
                 <Link className="nav-link text-dark" to="/about">
                   Acerca de
                 </Link>
@@ -39,13 +44,13 @@ function Header() {
             </ul>
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link className="nav-link text-dark" to="/">
-                  Register
+                <Link className="nav-link text-dark" to="/register">
+                  Registro
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link text-dark" to="/">
-                  Login
+                <Link className="nav-link text-dark" to="/login">
+                  Acceder
                 </Link>
               </li>
             </ul>

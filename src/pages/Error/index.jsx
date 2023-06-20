@@ -1,8 +1,8 @@
 function Error() {
   return (
     <>
-      <h1 class="text-danger">Error.</h1>
-      <h2 class="text-danger">
+      <h1 className="text-danger">Error.</h1>
+      <h2 className="text-danger">
         An error occurred while processing your request.
       </h2>
 

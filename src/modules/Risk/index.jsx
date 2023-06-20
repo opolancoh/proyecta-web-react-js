@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import RiskTable from "./Table";
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import RiskTable from './Table';
+import httpClient from '../../services/httpInterceptor.js';
 
 function RiskIndex() {
   const [data, setData] = useState([]);
@@ -8,9 +9,8 @@ function RiskIndex() {
 
   useEffect(() => {
     async function fetchRisks() {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/risks`);
-      const json = await response.json();
-      setData(json);
+      const result = await httpClient.get('/api/risks');
+      setData(result.data.d);
       setIsLoading(false);
     }
 

@@ -1,9 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useEffect, useState } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import { dateToLocaleString } from '../../../helpers/date-helper';
-import NotFound from '../../../pages/NotFound';
-import httpClient from '../../../services/httpInterceptor';
+import { useEffect, useState } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { dateToLocaleString } from "../../../helpers/date-helper";
+import NotFound from "../../../pages/NotFound";
 
 function RiskDetails() {
   const { riskId } = useParams();
@@ -14,10 +13,13 @@ function RiskDetails() {
 
   useEffect(() => {
     async function fetchRisk() {
-      const result = await httpClient.get(`/api/risks/${riskId}`);
-      if (result.data.status === 200) {
-        setData(result.data.d);
-      } else if (result.data.status === 404) setData(null);
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/risks/${riskId}`
+      );
+      if (response.status === 200) {
+        const json = await response.json();
+        setData(json);
+      } else if (response.status === 404) setData(null);
       else {
         setRequestHasError(true);
       }
@@ -34,7 +36,7 @@ function RiskDetails() {
   }
 
   if (requestHasError) {
-    navigate('/error');
+    navigate("/error");
     return null;
   }
 
@@ -98,7 +100,7 @@ function RiskDetails() {
               readOnly
             />
             <label className="">
-              Estado ({data.state ? 'Activo' : 'Inactivo'})
+              Estado ({data.state ? "Activo" : "Inactivo"})
             </label>
           </div>
         </div>
