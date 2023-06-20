@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import httpClient from '../../../services/httpInterceptor';
+import { login } from '../../../helpers/auth-helper';
+import { GlobalContext } from '../../../contexts/isAuthenticatedContext';
 
 const Login = () => {
+  const { isAuthenticated, setIsAuthenticated } = useContext(GlobalContext);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   // const [isLoading, setIsLoading] = useState(true);
@@ -12,6 +15,8 @@ const Login = () => {
   });
   const [formStateError, setformStateError] = useState({});
 
+  console.log('context Login', isAuthenticated);
+
   const handleSubmit = async () => {
     const { data } = await httpClient.post(
       '/api/auth/login',
@@ -19,10 +24,11 @@ const Login = () => {
     );
 
     if (data.status === 200) {
-      localStorage.setItem('access_token', data.d.token);
+      login(data.d.token);
+      setIsAuthenticated(true);
       let navigateUrl = searchParams.get('returnUrl');
       if (!navigateUrl) navigateUrl = '/';
-      navigate(navigateUrl);
+      navigate(navigateUrl);      
     } else if (data.status === 400) {
       setformStateError(data.errors);
     }
