@@ -1,5 +1,5 @@
 import './App.css';
-import { useMemo, useState } from 'react';
+// import { useMemo, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import RiskIndex from './modules/Risk';
@@ -12,22 +12,19 @@ import Error from './pages/Error';
 import UserIndex from './modules/User';
 import Register from './pages/Auth/Register';
 import Login from './pages/Auth/Login';
-import { GlobalContext } from './contexts/isAuthenticatedContext';
-import { isAuthenticated } from './helpers/auth-helper';
-
-const initialState = isAuthenticated;
+import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(initialState);
+  /* const [isAuthenticated, setIsAuthenticated] = useState(initialState);
 
   const globalContextValue = useMemo(
     () => ({ isAuthenticated, setIsAuthenticated }),
     [isAuthenticated]
-  );
+  ); */
 
   return (
     <BrowserRouter>
-      <GlobalContext.Provider value={globalContextValue}>
+      <AuthProvider>
         <Header />
         <div className="container">
           <main role="main" className="pb-3">
@@ -50,7 +47,7 @@ function App() {
           </main>
         </div>
         <Footer />
-      </GlobalContext.Provider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

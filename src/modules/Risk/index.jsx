@@ -1,20 +1,22 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import RiskTable from './Table';
+import Table from './Table';
 import httpClient from '../../services/httpInterceptor.js';
+
+const entityPath = 'risks';
 
 function RiskIndex() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchRisks() {
-      const result = await httpClient.get('/api/risks');
+    async function fetchData() {
+      const result = await httpClient.get(`/api/${entityPath}`);
       setData(result.data.d);
       setIsLoading(false);
     }
 
-    fetchRisks();
+    fetchData();
   }, []);
 
   if (isLoading) return null;
@@ -26,7 +28,7 @@ function RiskIndex() {
         <Link to="/">Crear Nuevo</Link>
       </p>
 
-      <RiskTable data={data} />
+      <Table entityPath={entityPath} data={data} />
     </>
   );
 }

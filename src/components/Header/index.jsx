@@ -1,18 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { GlobalContext } from '../../contexts/isAuthenticatedContext';
-import { logout, authContext } from '../../helpers/auth-helper';
+import { AuthContext } from '../../contexts/AuthContext';
 
 function Header() {
-  const { isAuthenticated, setIsAuthenticated } = useContext(GlobalContext);
-  const { jwt } = authContext;
-  console.log('context Header', isAuthenticated);
-
-  const handleLogout = () => {
-    logout();
-    setIsAuthenticated(false);
-  };
+  const { isAuthenticated, user, logout} = useContext(AuthContext);
+  console.log('context Header', user);
 
   return (
     <header>
@@ -59,12 +52,12 @@ function Header() {
               {isAuthenticated ? (
                 <>
                   <li className="nav-item">
-                    <Link className="nav-link text-dark" to="/register">
-                      Bienvenido, {jwt.payload.fullName}!
+                    <Link className="nav-link text-dark" to="/">
+                      Bienvenido, {user.fullName}!
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" href="#" onClick={handleLogout}>
+                    <a className="nav-link" href="#" onClick={logout}>
                       Cerrar sesión
                     </a>
                   </li>

@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-function UserTable({ entityPath, data }) {
+function Table({ entityPath, data }) {
   return (
     <table className="table">
       <thead>
@@ -18,7 +18,7 @@ function UserTable({ entityPath, data }) {
             <th scope="row">{x.userName}</th>
             <td>{x.firstName}</td>
             <td>{x.lastName}</td>
-            <td>{x.Roles}</td>
+            <td>{x.roles.join(' | ')}</td>
             <td>
               <div className="d-flex gap-2 mb-3">
                 <Link to={`/${entityPath}/edit/${x.id}`}>Editar</Link> |
@@ -33,4 +33,4 @@ function UserTable({ entityPath, data }) {
   );
 }
 
-export default UserTable;
+export default Table;

@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import RiskTable from "./Table";
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import Table from './Table';
+import httpClient from '../../services/httpInterceptor.js';
 
-const entityPath = "auth/users";
+const entityPath = 'users';
 
 function UserIndex() {
   const [data, setData] = useState([]);
@@ -10,11 +11,8 @@ function UserIndex() {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/${entityPath}`
-      );
-      const json = await response.json();
-      setData(json.data);
+      const result = await httpClient.get(`/api/${entityPath}`);
+      setData(result.data.d);
       setIsLoading(false);
     }
 
@@ -30,7 +28,7 @@ function UserIndex() {
         <Link to="/">Crear Nuevo</Link>
       </p>
 
-      <RiskTable data={(entityPath, data)} />
+      <Table entityPath={entityPath} data={data} />
     </>
   );
 }

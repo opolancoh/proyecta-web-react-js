@@ -1,17 +1,13 @@
-export const accessToken = localStorage.getItem('access_token');
+export const decodeJWT = (token) => {
+  if (!token) return null;
 
-export const isAuthenticated = accessToken !== null;
+  const parts = token.split('.');
+  const encodedHeader = parts[0];
+  const encodedPayload = parts[1];
+  const encodedSignature = parts[2];
 
-export const decodeJWT = () => {
-  if (accessToken === null) return null;
-
-  const parts = accessToken.split('.');
-  const tokenHeader = parts[0];
-  const tokenPayload = parts[1];
-  const tokenSignature = parts[2];
-
-  const decodedHeader = atob(tokenHeader);
-  const decodedPayload = atob(tokenPayload);
+  const decodedHeader = atob(encodedHeader);
+  const decodedPayload = atob(encodedPayload);
 
   const parsedHeader = JSON.parse(decodedHeader);
   const parsedPayload = JSON.parse(decodedPayload);
@@ -19,19 +15,6 @@ export const decodeJWT = () => {
   return {
     header: parsedHeader,
     payload: parsedPayload,
-    signature: tokenSignature,
+    signature: encodedSignature,
   };
-};
-
-export const authContext = {
-  isAuthenticated,
-  jwt: decodeJWT(),
-};
-
-export const login = (token) => {
-    localStorage.setItem('access_token', token);
-  };
-
-export const logout = () => {
-  localStorage.removeItem('access_token');
 };

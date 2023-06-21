@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-function RiskTable({ data }) {
+function Table({ entityPath, data }) {
   return (
     <table className="table">
       <thead>
@@ -31,16 +31,16 @@ function RiskTable({ data }) {
             <td className="text-center">
               <input
                 checked={x.state}
-                className="check-box"                
+                className="check-box"
                 type="checkbox"
                 readOnly
               ></input>
             </td>
             <td>
               <div className="d-flex gap-2 mb-3">
-                <Link to={`/risks/edit/${x.id}`}>Editar</Link> |
-                <Link to={`/risks/details/${x.id}`}>Detalle</Link> |
-                <Link to={`/risks/delete/${x.id}`}>Eliminar</Link>
+                <Link to={`/${entityPath}/edit/${x.id}`}>Editar</Link> |
+                <Link to={`/${entityPath}/details/${x.id}`}>Detalle</Link> |
+                <Link to={`/${entityPath}/delete/${x.id}`}>Eliminar</Link>
               </div>
             </td>
           </tr>
@@ -50,4 +50,4 @@ function RiskTable({ data }) {
   );
 }
 
-export default RiskTable;
+export default Table;

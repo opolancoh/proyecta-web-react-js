@@ -10,7 +10,7 @@ function About() {
 
   useEffect(() => {
     async function fetchDotNetInfo() {
-      const { data } = await httpClient.get('/info', { isAnonymous: true });
+      const { data } = await httpClient.get('/info', { withoutToken: true });
 
       if (data.status === 200) {
         setData(data.d);

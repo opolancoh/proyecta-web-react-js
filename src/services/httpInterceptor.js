@@ -14,7 +14,7 @@ httpClient.interceptors.request.use(
     config.lastRequestLocation = window.location.pathname;
 
     // Add authorization token if needed
-    if (!config.isAnonymous) {
+    if (!config.withoutToken) {
       const token = localStorage.getItem('access_token');
       if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;

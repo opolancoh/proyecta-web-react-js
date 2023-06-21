@@ -10,7 +10,7 @@ function Register() {
   });
   const [formStateError, setformStateError] = useState({});
 
-  console.log(formStateError);
+  // console.log(formStateError);
 
   const handleSubmit = async () => {
     const response = await fetch(
