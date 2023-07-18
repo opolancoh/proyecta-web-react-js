@@ -1,5 +1,4 @@
 import './App.css';
-// import { useMemo, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import RiskIndex from './modules/Risk';
@@ -13,15 +12,12 @@ import UserIndex from './modules/User';
 import Register from './pages/Auth/Register';
 import Login from './pages/Auth/Login';
 import { AuthProvider } from './contexts/AuthContext';
+import Forbidden from './pages/Forbidden';
+import UserDetails from './modules/User/Details';
+import UserAddOrUpdate from './modules/User/AddOrUpdate';
+import UserRemove from './modules/User/Remove';
 
 function App() {
-  /* const [isAuthenticated, setIsAuthenticated] = useState(initialState);
-
-  const globalContextValue = useMemo(
-    () => ({ isAuthenticated, setIsAuthenticated }),
-    [isAuthenticated]
-  ); */
-
   return (
     <BrowserRouter>
       <AuthProvider>
@@ -32,16 +28,20 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/risks">
                 <Route index element={<RiskIndex />} />
-                <Route path="details/:riskId" element={<RiskDetails />} />
+                <Route path="details/:entityId" element={<RiskDetails />} />
               </Route>
               <Route path="/users">
                 <Route index element={<UserIndex />} />
-                <Route path="details/:userId" element={<RiskDetails />} />
+                <Route path="details/:entityId" element={<UserDetails />} />    
+                <Route path="edit/:entityId" element={<UserAddOrUpdate />} />                            
+                <Route path="remove/:entityId" element={<UserRemove />} />
+                <Route path="add" element={<UserAddOrUpdate />} />
               </Route>
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/about" element={<About />} />
               <Route path="/error" element={<Error />} />
+              <Route path="/forbidden" element={<Forbidden />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

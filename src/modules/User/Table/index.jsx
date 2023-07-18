@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-function Table({ entityPath, data }) {
+function UserTable({ entityPath, data }) {
   return (
     <table className="table">
       <thead>
@@ -13,24 +13,38 @@ function Table({ entityPath, data }) {
         </tr>
       </thead>
       <tbody className="table-group-divider">
-        {data.map((x) => (
-          <tr key={x.id}>
-            <th scope="row">{x.userName}</th>
-            <td>{x.firstName}</td>
-            <td>{x.lastName}</td>
-            <td>{x.roles.join(' | ')}</td>
-            <td>
-              <div className="d-flex gap-2 mb-3">
-                <Link to={`/${entityPath}/edit/${x.id}`}>Editar</Link> |
-                <Link to={`/${entityPath}/details/${x.id}`}>Detalle</Link> |
-                <Link to={`/${entityPath}/delete/${x.id}`}>Eliminar</Link>
-              </div>
+        {data.length === 0 ? (
+          <tr>
+            <td colSpan="5" className="text-center">
+              No hay datos
             </td>
           </tr>
-        ))}
+        ) : (
+          data.map((x) => (
+            <tr key={x.id}>
+              <th scope="row">{x.userName}</th>
+              <td>{x.firstName}</td>
+              <td>{x.lastName}</td>
+              <td>
+                {x.roles.map((role) => (
+                  <span key={role} className="badge text-bg-secondary me-1">
+                    {role}
+                  </span>
+                ))}
+              </td>
+              <td>
+                <div className="d-flex gap-2 mb-3">
+                  <Link to={`/${entityPath}/details/${x.id}`}>Detalle</Link> |
+                  <Link to={`/${entityPath}/edit/${x.id}`}>Editar</Link> |
+                  <Link to={`/${entityPath}/remove/${x.id}`}>Eliminar</Link>
+                </div>
+              </td>
+            </tr>
+          ))
+        )}
       </tbody>
     </table>
   );
 }
 
-export default Table;
+export default UserTable;

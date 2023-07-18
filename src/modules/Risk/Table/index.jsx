@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-function Table({ entityPath, data }) {
+function RiskTable({ entityPath, data }) {
   return (
     <table className="table">
       <thead>
@@ -50,4 +50,4 @@ function Table({ entityPath, data }) {
   );
 }
 
-export default Table;
+export default RiskTable;

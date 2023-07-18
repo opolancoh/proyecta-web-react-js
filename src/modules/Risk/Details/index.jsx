@@ -1,12 +1,13 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { entityPath } from "..";
 import { dateToLocaleString } from '../../../helpers/date-helper';
 import NotFound from '../../../pages/NotFound';
 import httpClient from '../../../services/httpInterceptor';
 
 function RiskDetails() {
-  const { riskId } = useParams();
+  const { entityId } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -14,7 +15,7 @@ function RiskDetails() {
 
   useEffect(() => {
     async function fetchRisk() {
-      const result = await httpClient.get(`/api/risks/${riskId}`);
+      const result = await httpClient.get(`/api/${entityPath}/${entityId}`);
       if (result.data.status === 200) {
         setData(result.data.d);
       } else if (result.data.status === 404) setData(null);
@@ -25,7 +26,7 @@ function RiskDetails() {
     }
 
     fetchRisk();
-  }, [riskId]);
+  }, [entityId]);
 
   if (isLoading) return null;
 
@@ -43,8 +44,8 @@ function RiskDetails() {
       <h1>Detalle</h1>
       <h4>Riesgo</h4>
       <div className="d-flex gap-2 mb-3">
-        <Link to={`/risks/edit/${riskId}`}>Editar</Link> |
-        <Link to={`/risks`}>Volver a la lista</Link>
+        <Link to={`/${entityPath}/edit/${entityId}`}>Editar</Link> |
+        <Link to={`/${entityPath}`}>Volver a la lista</Link>
       </div>
       <hr />
 

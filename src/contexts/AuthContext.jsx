@@ -8,7 +8,7 @@ const getUserFromToken = (token) => {
   
     return {
       id: payload.sub,
-      fullName: payload.fullName,
+      name: payload.name,
       roles: payload.roles !== undefined ? payload.roles : null,
       isAdmin: payload.isAdmin,
     };
@@ -59,16 +59,18 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Actions
-  const login = (token) => {
-    localStorage.setItem("access_token", token);
+  const login = (data) => {
+    localStorage.setItem("access_token", data.accessToken);
+    localStorage.setItem("refresh_token", data.refreshToken);
     dispatch({
       type: "LOGIN",
-      payload: getUserFromToken(token),
+      payload: getUserFromToken(data.accessToken),
     });
   };
 
   const logout = () => {
     localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
     dispatch({ type: "LOGOUT" });
     location.reload()
   };

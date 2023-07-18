@@ -6,7 +6,7 @@ import { dateToLocaleString } from '../../../helpers/date-helper';
 import NotFound from '../../../pages/NotFound';
 import httpClient from '../../../services/httpInterceptor';
 
-function UserDetails() {
+export default function UserRemove() {
   const { entityId } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState({});
@@ -14,8 +14,8 @@ function UserDetails() {
   const [requestHasError, setRequestHasError] = useState(false);
 
   useEffect(() => {
-    async function fetchUser() {
-      const result = await httpClient.get(`/api/${entityPath}/${entityId}`);
+    async function fetchItem(itemId) {
+      const result = await httpClient.get(`/api/${entityPath}/${itemId}`);
       if (result.data.status === 200) {
         setData(result.data.d);
       } else if (result.data.status === 404) setData(null);
@@ -25,8 +25,18 @@ function UserDetails() {
       setIsLoading(false);
     }
 
-    fetchUser();
+    fetchItem(entityId);
   }, [entityId]);
+
+  const handleSubmit = async () => {
+    // Send request
+    const result = await httpClient.delete(`/api/${entityPath}/${entityId}`);
+    if (result.data.status === 200) {
+      navigate(`/${entityPath}`);
+    } else {
+      setRequestHasError(true);
+    }
+  };
 
   if (isLoading) return null;
 
@@ -41,10 +51,10 @@ function UserDetails() {
 
   return (
     <>
-      <h1>Detalle</h1>
+      <h1>Eliminar</h1>
       <h4>Usuario</h4>
+      <h4>Está seguro de eliminar este elemento?</h4>
       <div className="d-flex gap-2 mb-3">
-        <Link to={`/${entityPath}/edit/${entityId}`}>Editar</Link> |
         <Link to={`/${entityPath}`}>Volver a la lista</Link>
       </div>
       <hr />
@@ -65,8 +75,14 @@ function UserDetails() {
         <dt className="col-sm-1">Modificado:</dt>
         <dd className="col-sm-11">{dateToLocaleString(data.updatedAt)}</dd>
       </dl>
+
+      <div className="row">
+        <div className="col-md-2">
+          <button className="btn btn-primary" onClick={handleSubmit}>
+            Eliminar
+          </button>
+        </div>
+      </div>
     </>
   );
 }
-
-export default UserDetails;

@@ -2,7 +2,7 @@ function NotFound() {
   return (
     <>
       <h1>404: Page Not Found</h1>
-      <p>Use esta página para agregar contenido relacionado.</p>
+      <p>{`We looked everywhere but we couldn't find this page.`}</p>
     </>
   );
 }

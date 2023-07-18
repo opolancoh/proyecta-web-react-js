@@ -22,7 +22,7 @@ const Login = () => {
     );
 
     if (data.status === 200) {
-      login(data.d.token);
+      login(data.d);
       let navigateUrl = searchParams.get('returnUrl');
       if (!navigateUrl) navigateUrl = '/';
       navigate(navigateUrl);

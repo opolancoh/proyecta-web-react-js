@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Table from './Table';
 import httpClient from '../../services/httpInterceptor.js';
 
-const entityPath = 'users';
+export const entityPath = 'users';
 
 function UserIndex() {
   const [data, setData] = useState([]);
@@ -25,7 +25,7 @@ function UserIndex() {
     <>
       <h1>Usuarios</h1>
       <p>
-        <Link to="/">Crear Nuevo</Link>
+        <Link to={`/${entityPath}/add`}>Crear Nuevo</Link>
       </p>
 
       <Table entityPath={entityPath} data={data} />

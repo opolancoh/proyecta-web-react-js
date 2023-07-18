@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Table from './Table';
 import httpClient from '../../services/httpInterceptor.js';
 
-const entityPath = 'risks';
+export const entityPath = 'risks';
 
 function RiskIndex() {
   const [data, setData] = useState([]);

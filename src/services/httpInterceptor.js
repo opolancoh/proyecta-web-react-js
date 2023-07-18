@@ -34,12 +34,16 @@ httpClient.interceptors.response.use(
   },
   (error) => {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
-
+    console.log(`Http request error: ${error.response.status} ${error.response.statusText} ${error.config.url}`);
     if (error.response.status === 401) {
       // Handle 401 error (unauthorized)
       let returnUrl = error.config.lastRequestLocation;
       if (!returnUrl) returnUrl = '/';
       window.location = `/login?returnUrl=${encodeURI(returnUrl)}`;
+    }
+    else if(error.response.status === 403) {
+      // Handle 403 error (forbidden)
+      window.location = '/forbidden';
     }
 
     /* if (error.response.status === 401 && !originalRequest._retry) {
