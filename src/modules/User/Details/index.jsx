@@ -44,7 +44,7 @@ function UserDetails() {
       <h1>Detalle</h1>
       <h4>Usuario</h4>
       <div className="d-flex gap-2 mb-3">
-        <Link to={`/${entityPath}/edit/${entityId}`}>Editar</Link> |
+        <Link to={`/${entityPath}/${entityId}/edit`}>Editar</Link> |
         <Link to={`/${entityPath}`}>Volver a la lista</Link>
       </div>
       <hr />

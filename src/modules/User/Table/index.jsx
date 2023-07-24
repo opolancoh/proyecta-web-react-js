@@ -66,9 +66,9 @@ function UserTable({ entityPath, data, isLoading }) {
           </td>
           <td>
             <div className="d-flex gap-2 mb-3">
-              <Link to={`/${entityPath}/details/${x.id}`}>Detalle</Link> |
-              <Link to={`/${entityPath}/edit/${x.id}`}>Editar</Link> |
-              <Link to={`/${entityPath}/remove/${x.id}`}>Eliminar</Link>
+              <Link to={`/${entityPath}/${x.id}`}>Detalle</Link> |
+              <Link to={`/${entityPath}/${x.id}/edit`}>Editar</Link> |
+              <Link to={`/${entityPath}/${x.id}/delete`}>Eliminar</Link>
             </div>
           </td>
         </tr>

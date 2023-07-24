@@ -28,14 +28,14 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/risks">
                 <Route index element={<RiskIndex />} />
-                <Route path="details/:entityId" element={<RiskDetails />} />
+                <Route path=":entityId" element={<RiskDetails />} />
               </Route>
               <Route path="/users">
                 <Route index element={<UserIndex />} />
-                <Route path="details/:entityId" element={<UserDetails />} />    
-                <Route path="edit/:entityId" element={<UserAddOrUpdate />} />                            
-                <Route path="remove/:entityId" element={<UserRemove />} />
-                <Route path="add" element={<UserAddOrUpdate />} />
+                <Route path="new" element={<UserAddOrUpdate />} />
+                <Route path=":entityId" element={<UserDetails />} />    
+                <Route path=":entityId/edit" element={<UserAddOrUpdate />} />                            
+                <Route path=":entityId/delete" element={<UserRemove />} />                
               </Route>
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />

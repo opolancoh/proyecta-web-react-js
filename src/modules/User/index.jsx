@@ -36,7 +36,7 @@ function UserIndex() {
     <>
       <h1>Usuarios</h1>
       <p>
-        <Link to={`/${entityPath}/add`}>Crear Nuevo</Link>
+        <Link to={`/${entityPath}/new`}>Crear Nuevo</Link>
       </p>
 
       <Table entityPath={entityPath} data={data} isLoading={isLoading} />
