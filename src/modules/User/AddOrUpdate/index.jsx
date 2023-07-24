@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import MinimalActionToast from '../../../components/MinimalActionToast';
 import { entityPath } from '..';
 import NotFound from '../../../pages/NotFound';
 import httpClient from '../../../services/httpInterceptor';
@@ -18,6 +19,7 @@ function UserAddOrUpdate() {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [requestHasError, setRequestHasError] = useState(false);
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     async function fetchUser() {
@@ -53,35 +55,42 @@ function UserAddOrUpdate() {
     if (!entityId) body.password = data.password;
 
     // Send request
-    if (entityId) {
-      const result = await httpClient.put(
-        `/api/${entityPath}/${entityId}`,
-        body
-      );
-      if (result.data.status === 200) {
-        navigate(`/${entityPath}`);
-      } else {
-        setRequestHasError(true);
-      }
+    const resultPromise = entityId
+      ? httpClient.put(`/api/${entityPath}/${entityId}`, body)
+      : httpClient.post(`/api/${entityPath}`, body);
+    const result = await resultPromise;
+
+    if ([200, 201].includes(result.data.status)) {
+      navigate(`/${entityPath}`, {
+        state: {
+          notification: {
+            action: 'success',
+            message: `Usuario ${
+              entityId ? 'actualizado' : 'creado'
+            } correctamente.`,
+          },
+        },
+      });
+    } else if ([400].includes(result.data.status)) {
+      setNotification({
+        action: 'error',
+        message: result.data.errors[0].description,
+      });
     } else {
-      const result = await httpClient.post(`/api/${entityPath}`, body);
-      // eslint-disable-next-line no-debugger
-      debugger;
-      if (result.data.status === 201) {
-        navigate(`/${entityPath}`);
-      } else {
-        setRequestHasError(true);
-      }
+      setRequestHasError(true);
     }
   };
 
   const handleOnChange = (e) => {
-    // setData({ ...data, [e.target.id]: e.target.value });
     setData({
       ...data,
       [e.target.id]:
         e.target.type === 'checkbox' ? e.target.checked : e.target.value,
     });
+  };
+
+  const handleOnCloseNotification = () => {
+    setNotification(null);
   };
 
   if (isLoading) return null;
@@ -183,6 +192,7 @@ function UserAddOrUpdate() {
           </div>
         </div>
       </div>
+
       <br />
       <div className="row">
         <div className="col-md-2">
@@ -191,6 +201,14 @@ function UserAddOrUpdate() {
           </button>
         </div>
       </div>
+
+      {notification !== null ? (
+        <MinimalActionToast
+          action={notification.action}
+          message={notification.message}
+          onClose={handleOnCloseNotification}
+        />
+      ) : null}
     </>
   );
 }

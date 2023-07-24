@@ -32,7 +32,14 @@ export default function UserRemove() {
     // Send request
     const result = await httpClient.delete(`/api/${entityPath}/${entityId}`);
     if (result.data.status === 200) {
-      navigate(`/${entityPath}`);
+      navigate(`/${entityPath}`, {
+        state: {
+          notification: {
+            action: 'success',
+            message: `Usuario eliminado correctamente.`,
+          },
+        },
+      });
     } else {
       setRequestHasError(true);
     }
