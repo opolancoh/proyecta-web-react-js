@@ -1,10 +1,17 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { entityPath } from "..";
+import { entityPath } from '..';
 import { dateToLocaleString } from '../../../helpers/date-helper';
 import NotFound from '../../../pages/NotFound';
 import httpClient from '../../../services/httpInterceptor';
+import {
+  getRiskManageabilityName,
+  getRiskPhaseName,
+  getRiskTypeName,
+} from '../Utilities/translations';
+import Loading from '../../../components/Loading';
 
 function RiskDetails() {
   const { entityId } = useParams();
@@ -28,7 +35,7 @@ function RiskDetails() {
     fetchRisk();
   }, [entityId]);
 
-  if (isLoading) return null;
+  if (isLoading) return <Loading />;
 
   if (data === null) {
     return <NotFound />;
@@ -50,57 +57,76 @@ function RiskDetails() {
       <hr />
 
       <div className="row g-3">
-        <div className="col-md-12">
-          <label className="form-label">Nombre</label>
-          <label className="form-control">{data.name}</label>
-        </div>
-        <div className="col-md-4">
-          <label className="form-label">Código</label>
-          <label className="form-control">{data.code}</label>
-        </div>
-        <div className="col-md-4">
-          <label className="form-label">Categoría</label>
-          <label className="form-control">{data.category}</label>
-        </div>
-        <div className="col-md-4">
-          <label className="form-label">Tipo</label>
-          <label className="form-control">{data.type}</label>
+        <div className="col-md-6">
+          <div className="d-block">
+            <strong className="d-block h5 mb-0">Nombre</strong>
+            <span className="text-secondary">{data.name}</span>
+          </div>
         </div>
         <div className="col-md-6">
-          <label className="form-label">Dueño</label>
-          <label className="form-control">{data.owner}</label>
+          <div className="d-block">
+            <strong className="d-block h5 mb-0">Código</strong>
+            <span className="text-secondary">{data.code}</span>
+          </div>
         </div>
         <div className="col-md-6">
-          <label className="form-label">Fase</label>
-          <label className="form-control">{data.phase}</label>
+          <div className="d-block">
+            <strong className="d-block h5 mb-0">Categoría</strong>
+            <span className="text-secondary">{data.category.name}</span>
+          </div>
         </div>
         <div className="col-md-6">
-          <label className="form-label">Manejabilidad</label>
-          <label className="form-control">{data.manageability}</label>
+          <div className="d-block">
+            <strong className="d-block h5 mb-0">Tipo</strong>
+            <span className="text-secondary">{getRiskTypeName(data.type)}</span>
+          </div>
         </div>
         <div className="col-md-6">
-          <label className="form-label">Tratamiento</label>
-          <label className="form-control">{data.treatment}</label>
+          <div className="d-block">
+            <strong className="d-block h5 mb-0">Dueño</strong>
+            <span className="text-secondary">{data.owner.name}</span>
+          </div>
         </div>
         <div className="col-md-6">
-          <label className="form-label">Fecha Inicial</label>
-          <label className="form-control">{data.dateFrom}</label>
+          <div className="d-block">
+            <strong className="d-block h5 mb-0">Fase</strong>
+            <span className="text-secondary">
+              {getRiskPhaseName(data.phase)}
+            </span>
+          </div>
         </div>
         <div className="col-md-6">
-          <label className="form-label">Fecha Final</label>
-          <label className="form-control">{data.dateTo}</label>
+          <div className="d-block">
+            <strong className="d-block h5 mb-0">Manejabilidad</strong>
+            <span className="text-secondary">
+              {getRiskManageabilityName(data.manageability)}
+            </span>
+          </div>
         </div>
-        <div className="col-12">
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              checked={data.state}
-              readOnly
-            />
-            <label className="">
-              Estado ({data.state ? 'Activo' : 'Inactivo'})
-            </label>
+        <div className="col-md-6">
+          <div className="d-block">
+            <strong className="d-block h5 mb-0">Tratamiento</strong>
+            <span className="text-secondary">{data.treatment.name}</span>
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="d-block">
+            <strong className="d-block h5 mb-0">Fecha inicial</strong>
+            <span className="text-secondary">{data.dateFrom}</span>
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="d-block">
+            <strong className="d-block h5 mb-0">Fecha final</strong>
+            <span className="text-secondary">{data.dateTo}</span>
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="d-block">
+            <strong className="d-block h5 mb-0">Estado</strong>
+            <span className="badge text-bg-primary">
+              {data.state ? 'Activo' : 'Inactivo'}
+            </span>
           </div>
         </div>
       </div>

@@ -5,6 +5,7 @@ import { entityPath } from '..';
 import { dateToLocaleString } from '../../../helpers/date-helper';
 import NotFound from '../../../pages/NotFound';
 import httpClient from '../../../services/httpInterceptor';
+import Loading from '../../../components/Loading';
 
 function UserDetails() {
   const { entityId } = useParams();
@@ -28,7 +29,7 @@ function UserDetails() {
     fetchUser();
   }, [entityId]);
 
-  if (isLoading) return null;
+  if (isLoading) return <Loading />;
 
   if (data === null) {
     return <NotFound />;

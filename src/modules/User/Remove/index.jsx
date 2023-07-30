@@ -5,6 +5,7 @@ import { entityPath } from '..';
 import { dateToLocaleString } from '../../../helpers/date-helper';
 import NotFound from '../../../pages/NotFound';
 import httpClient from '../../../services/httpInterceptor';
+import Loading from '../../../components/Loading';
 
 export default function UserRemove() {
   const { entityId } = useParams();
@@ -45,7 +46,7 @@ export default function UserRemove() {
     }
   };
 
-  if (isLoading) return null;
+  if (isLoading) return <Loading />;
 
   if (data === null) {
     return <NotFound />;

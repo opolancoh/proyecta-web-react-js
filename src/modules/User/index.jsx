@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import MinimalActionToast from '../../components/MinimalActionToast';
 import Table from './Table';
 import httpClient from '../../services/httpInterceptor.js';
+import Loading from '../../components/Loading';
 
 export const entityPath = 'users';
 
@@ -32,6 +33,8 @@ function UserIndex() {
     setNotification(null);
   };
 
+  if (isLoading) return <Loading />;
+
   return (
     <>
       <h1>Usuarios</h1>
@@ -40,6 +43,7 @@ function UserIndex() {
       </p>
 
       <Table entityPath={entityPath} data={data} isLoading={isLoading} />
+      
       {notification !== null ? (
         <MinimalActionToast
           action={notification.action}

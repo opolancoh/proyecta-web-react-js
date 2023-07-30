@@ -16,6 +16,7 @@ import Forbidden from './pages/Forbidden';
 import UserDetails from './modules/User/Details';
 import UserAddOrUpdate from './modules/User/AddOrUpdate';
 import UserRemove from './modules/User/Remove';
+import RiskAddOrUpdate from './modules/Risk/AddOrUpdate';
 
 function App() {
   return (
@@ -28,7 +29,9 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/risks">
                 <Route index element={<RiskIndex />} />
+                <Route path="new" element={<RiskAddOrUpdate />} /> 
                 <Route path=":entityId" element={<RiskDetails />} />
+                <Route path=":entityId/edit" element={<RiskAddOrUpdate />} /> 
               </Route>
               <Route path="/users">
                 <Route index element={<UserIndex />} />

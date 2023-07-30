@@ -5,6 +5,7 @@ import MinimalActionToast from '../../../components/MinimalActionToast';
 import { entityPath } from '..';
 import NotFound from '../../../pages/NotFound';
 import httpClient from '../../../services/httpInterceptor';
+import Loading from '../../../components/Loading';
 
 function UserAddOrUpdate() {
   const { entityId } = useParams();
@@ -93,7 +94,7 @@ function UserAddOrUpdate() {
     setNotification(null);
   };
 
-  if (isLoading) return null;
+  if (isLoading) return <Loading />;
 
   if (requestHasError) {
     navigate('/error');

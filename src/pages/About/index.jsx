@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import httpClient from '../../services/httpInterceptor';
+import Loading from '../../components/Loading';
 
 function About() {
   const [data, setData] = useState({});
@@ -24,7 +25,7 @@ function About() {
     fetchDotNetInfo();
   }, []);
 
-  if (isLoading) return null;
+  if (isLoading) return <Loading />;
 
   if (requestHasError) {
     navigate('/error');
