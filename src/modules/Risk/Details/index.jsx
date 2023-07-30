@@ -124,7 +124,7 @@ function RiskDetails() {
         <div className="col-md-6">
           <div className="d-block">
             <strong className="d-block h5 mb-0">Estado</strong>
-            <span className="badge text-bg-primary">
+            <span className={`badge text-bg-${data.state ? 'primary' : 'secondary'}`}>
               {data.state ? 'Activo' : 'Inactivo'}
             </span>
           </div>
