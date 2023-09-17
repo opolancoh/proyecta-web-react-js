@@ -9,6 +9,7 @@ const getUserFromToken = (token) => {
     return {
       id: payload.sub,
       name: payload.name,
+      username: payload.username,
       roles: payload.roles !== undefined ? payload.roles : null,
       isAdmin: payload.isAdmin,
     };

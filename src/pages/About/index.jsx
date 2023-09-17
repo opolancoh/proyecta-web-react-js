@@ -63,6 +63,10 @@ function About() {
               <td>{data.dotnetVersion}</td>
             </tr>
             <tr>
+              <td>.NET Environment</td>
+              <td>{data.dotnetEnvironment}</td>
+            </tr>
+            <tr>
               <td>Operating system</td>
               <td>{data.operatingSystem}</td>
             </tr>

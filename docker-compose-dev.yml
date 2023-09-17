@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  proyecta_app_react_dev:
+    image: proyecta-app-react
+    container_name: proyecta-app-react-dev
+    build:
+      context: .
+      args:
+        REACT_APP_API_URL: ${PROYECTA_APP_API_URL}
+    ports:
+      - "80:80"
+    networks:
+      - proyecta-network
+
+networks:
+  proyecta-network:
+    external: true

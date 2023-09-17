@@ -53,7 +53,7 @@ function Header() {
                 <>
                   <li className="nav-item">
                     <Link className="nav-link text-dark" to="/">
-                      Bienvenido, {user.name}!
+                      Bienvenido, {user.username}!
                     </Link>
                   </li>
                   <li className="nav-item">
