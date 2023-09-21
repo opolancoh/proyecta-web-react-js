@@ -4,11 +4,12 @@ FROM node:18-alpine AS build
 # Set the working directory
 WORKDIR /app
 
+# Copy package.json and package-lock.json
 COPY package.json /app
-COPY yarn.lock /app
+COPY package-lock.json /app
 
 # Install dependencies
-RUN yarn install
+RUN npm ci
 
 # Copy the source code
 COPY . .
@@ -18,7 +19,7 @@ ARG REACT_APP_API_URL
 ENV REACT_APP_API_URL=$REACT_APP_API_URL
 
 # Build the application
-RUN yarn build
+RUN npm run build
 
 
 # Stage 2: Serve the React application from Nginx
