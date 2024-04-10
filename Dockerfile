@@ -14,15 +14,18 @@ RUN npm ci
 # Copy the source code
 COPY . .
 
-# Build the React app with overridden environment variables
+# Set environment variables for the build
 ARG REACT_APP_API_URL
 ENV REACT_APP_API_URL=$REACT_APP_API_URL
+
+# Print the value of REACT_APP_API_URL
+RUN echo "REACT_APP_API_URL is '${REACT_APP_API_URL}'"
 
 # Build the application
 RUN npm run build
 
 
-# Stage 2: Serve the React application from Nginx
+# Stage 2: Serve the application from Nginx
 FROM nginx:alpine
 
 # Copy the build output to replace the default Nginx contents

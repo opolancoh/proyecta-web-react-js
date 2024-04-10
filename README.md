@@ -1,34 +1,17 @@
-# Proyecta React App
+# Proyecta App
+A React web app.
 
-## Docker Containers (execute the commands in the root folder)
-### Build and Run the container
+## Technologies in this repo:
+* React 18.0.2
+* Bootstrap 5.3.0
+
+## Docker Containers
+#### Create the image
 ```sh
-docker compose -f docker-compose-dev.yml up --build  -d
+docker build --build-arg REACT_APP_API_URL=https://localhost:8000 -t proyecta_app_react:latest .
 ```
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+#### Run containers
+```sh
+docker compose -f docker-compose-dev.yml up -d
+```

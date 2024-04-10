@@ -8,6 +8,7 @@ const httpClient = axios.create({
   },
 });
 
+// Axios request interceptor
 httpClient.interceptors.request.use(
   (config) => {
     // Add current location
@@ -27,6 +28,7 @@ httpClient.interceptors.request.use(
   }
 );
 
+// Axios response interceptor
 httpClient.interceptors.response.use(
   (response) => {
     // Any status code that lie within the range of 2xx cause this function to trigger
@@ -34,14 +36,15 @@ httpClient.interceptors.response.use(
   },
   (error) => {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
-    console.log(`Http request error: ${error.response.status} ${error.response.statusText} ${error.config.url}`);
+    console.log(
+      `Http request error: ${error.response.status} ${error.response.statusText} ${error.config.url}`
+    );
     if (error.response.status === 401) {
       // Handle 401 error (unauthorized)
       let returnUrl = error.config.lastRequestLocation;
       if (!returnUrl) returnUrl = '/';
       window.location = `/login?returnUrl=${encodeURI(returnUrl)}`;
-    }
-    else if(error.response.status === 403) {
+    } else if (error.response.status === 403) {
       // Handle 403 error (forbidden)
       window.location = '/forbidden';
     }

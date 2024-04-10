@@ -11,7 +11,7 @@ function About() {
 
   useEffect(() => {
     async function fetchDotNetInfo() {
-      const { data } = await httpClient.get('/info', { withoutToken: true });
+      const { data } = await httpClient.get('/info-app', { withoutToken: false });
 
       if (data.status === 200) {
         setData(data.d);
@@ -45,6 +45,10 @@ function About() {
             <tr>
               <td>REACT_APP_VERSION:</td>
               <td> {process.env.REACT_APP_VERSION}</td>
+            </tr>
+            <tr>
+              <td>NODE_ENV:</td>
+              <td> {process.env.NODE_ENV}</td>
             </tr>
             <tr>
               <td>REACT_APP_API_URL:</td>

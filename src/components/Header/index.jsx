@@ -5,7 +5,6 @@ import { AuthContext } from '../../contexts/AuthContext';
 
 function Header() {
   const { isAuthenticated, user, logout} = useContext(AuthContext);
-  console.log('context Header', user);
 
   return (
     <header>
@@ -65,13 +64,8 @@ function Header() {
               ) : (
                 <>
                   <li className="nav-item">
-                    <Link className="nav-link text-dark" to="/register">
-                      Registro
-                    </Link>
-                  </li>
-                  <li className="nav-item">
                     <Link className="nav-link text-dark" to="/login">
-                      Acceder
+                      Iniciar sesión
                     </Link>
                   </li>
                 </>

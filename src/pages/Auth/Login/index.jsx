@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import httpClient from '../../../services/httpInterceptor';
 import { AuthContext } from '../../../contexts/AuthContext';
 
@@ -41,7 +41,7 @@ const Login = () => {
 
   return (
     <>
-      <h1>Acceder</h1>
+      <h1>Inicio de sesión</h1>
       <p>Usa tu cuenta.</p>
       <br />
       {formStateError._ && (
@@ -95,13 +95,13 @@ const Login = () => {
               </div>
             ))}
         </div>
-
-        <div className="form-group form-check">
+        <br />
+        {/* <div className="form-group form-check">
           <input type="checkbox" className="form-check-input" id="rememberMe" />
           <label className="form-check-label" htmlFor="rememberMe">
             Recordarme
           </label>
-        </div>
+        </div> */}
 
         <button
           type="button"
@@ -111,6 +111,11 @@ const Login = () => {
           Iniciar Sesión
         </button>
       </form>
+
+      <br />
+      <Link to="/register">
+        Crear una cuenta
+      </Link>
     </>
   );
 };
