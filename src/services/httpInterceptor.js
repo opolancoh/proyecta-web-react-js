@@ -36,20 +36,29 @@ httpClient.interceptors.response.use(
   },
   (error) => {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
-    console.log(
-      `Http request error: ${error.response.status} ${error.response.statusText} ${error.config.url}`
-    );
-    if (error.response.status === 401) {
-      // Handle 401 error (unauthorized)
-      let returnUrl = error.config.lastRequestLocation;
-      if (!returnUrl) returnUrl = '/';
-      window.location = `/login?returnUrl=${encodeURI(returnUrl)}`;
-    } else if (error.response.status === 403) {
-      // Handle 403 error (forbidden)
-      window.location = '/forbidden';
-    }
+    // Check if the error is due to a network problem or the server is unreachable
+    if (!error.response) {
+      // Handle network errors or server down scenarios
+      console.error('Network error or server is unreachable.');
+      // Optionally, you can redirect to a custom error page or display a global error message
+      window.location = '/error';
+    } else {
+      // Log the HTTP request error details
+      console.error(
+        `HTTP request error: ${error.response.status} ${error.response.statusText} ${error.config.url}`
+      );
+      // Handle specific HTTP status codes
+      if (error.response.status === 401) {
+        // Handle 401 error (unauthorized)
+        let returnUrl = error.config.lastRequestLocation || '/';
+        window.location = `/login?returnUrl=${encodeURIComponent(returnUrl)}`;
+      } else if (error.response.status === 403) {
+        // Handle 403 error (forbidden)
+        window.location = '/forbidden';
+      }
+      // Additional status code handling can be added here
 
-    /* if (error.response.status === 401 && !originalRequest._retry) {
+      /* if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
       const refreshToken = localStorageService.getRefreshToken()
       return axios
@@ -65,7 +74,7 @@ httpClient.interceptors.response.use(
           }
         })
     } */
-
+    }
     // Pass the error to the next error handler
     return Promise.reject(error);
   }

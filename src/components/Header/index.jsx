@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 
 function Header() {
-  const { isAuthenticated, user, logout} = useContext(AuthContext);
+  const { isAuthenticated, user, logout } = useContext(AuthContext);
 
   return (
     <header>
@@ -41,10 +41,33 @@ function Header() {
                   Usuarios
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link text-dark" to="/about">
-                  Acerca de
-                </Link>
+              <li className="nav-item dropdown">
+                <a
+                  className="nav-link dropdown-toggle text-dark"
+                  data-bs-toggle="dropdown"
+                  href="#"
+                  role="button"
+                  aria-expanded="false"
+                >
+                  Ayuda
+                </a>
+                <ul className="dropdown-menu">
+                  <li>
+                    <Link className="dropdown-item" to="/about">
+                      Acerca de
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/app-info">
+                      Información de la APP
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/api-info">
+                      Información de la API
+                    </Link>
+                  </li>
+                </ul>
               </li>
             </ul>
             <ul className="navbar-nav">
@@ -56,7 +79,7 @@ function Header() {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" href="#" onClick={logout}>
+                    <a className="nav-link text-dark" href="#" onClick={logout}>
                       Cerrar sesión
                     </a>
                   </li>

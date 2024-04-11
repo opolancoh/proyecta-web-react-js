@@ -4,6 +4,12 @@ FROM node:18-alpine AS build
 # Set the working directory
 WORKDIR /app
 
+# Set NODE_ENV
+ARG ENVIRONMENT
+ENV NODE_ENV=$ENVIRONMENT
+# Print the value of REACT_APP_API_URL
+RUN echo "NODE_ENV is '${NODE_ENV}'"
+
 # Copy package.json and package-lock.json
 COPY package.json /app
 COPY package-lock.json /app
@@ -15,10 +21,8 @@ RUN npm ci
 COPY . .
 
 # Set environment variables for the build
-ARG REACT_APP_API_URL
-ENV REACT_APP_API_URL=$REACT_APP_API_URL
-
-# Print the value of REACT_APP_API_URL
+ARG API_URL
+ENV REACT_APP_API_URL=$API_URL
 RUN echo "REACT_APP_API_URL is '${REACT_APP_API_URL}'"
 
 # Build the application

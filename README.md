@@ -8,10 +8,10 @@ A React web app.
 ## Docker Containers
 #### Create the image
 ```sh
-docker build --build-arg REACT_APP_API_URL=https://localhost:8000 -t proyecta_app_react:latest .
+docker build --build-arg API_URL=https://localhost:8000 --build-arg ENVIRONMENT=development -t proyecta_app_react_dev:latest .
 ```
 
 #### Run containers
 ```sh
-docker compose -f docker-compose-dev.yml up -d
+docker run -d --name proyecta_app_react_dev -p 3100:80 proyecta_app_react_dev
 ```
