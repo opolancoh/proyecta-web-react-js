@@ -11,9 +11,7 @@ function ApiInfo() {
 
   useEffect(() => {
     async function fetchDotNetInfo() {
-      const { data } = await httpClient.get('/system-info', {
-        withoutToken: false,
-      });
+      const { data } = await httpClient.get('/system-info');
 
       if (data.status === 200) {
         setData(data.d);

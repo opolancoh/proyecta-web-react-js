@@ -10,8 +10,8 @@ This repository contains a React Web App.
 ## Docker Containers
 #### Create the image
 ```sh
-docker build -t proyecta/web-react-dev:latest --build-arg API_URL=https://localhost:5100 -f Dockerfile-dev .
-docker build -t proyecta/web-react-prod:latest --build-arg API_URL=https://localhost:5100 -f Dockerfile-prod .
+docker build -t proyecta/web-react-dev:latest --build-arg API_URL=https://localhost:5100 -f Dockerfile.dev .
+docker build -t proyecta/web-react-prod:latest --build-arg API_URL=https://localhost:5100 -f Dockerfile.prod .
 ```
 
 #### Run containers

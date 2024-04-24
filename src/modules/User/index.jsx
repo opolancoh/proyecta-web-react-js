@@ -18,7 +18,7 @@ function UserIndex() {
   useEffect(() => {
     async function fetchData() {
       const result = await httpClient.get(`/api/${entityPath}`);
-      setData(result.data.d);
+      setData(result.data.data);
       setIsLoading(false);
     }
 

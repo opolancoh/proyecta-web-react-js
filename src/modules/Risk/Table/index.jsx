@@ -80,7 +80,7 @@ function RiskTable({ entityPath, data, isLoading }) {
             <div className="d-flex gap-2 mb-3">
               <Link to={`/${entityPath}/${x.id}`}>Detalle</Link> |
               <Link to={`/${entityPath}/${x.id}/edit`}>Editar</Link> |
-              <Link to={`/${entityPath}/${x.id}/delete`}>Eliminar</Link>
+              <Link to={`/${entityPath}/${x.id}/remove`}>Eliminar</Link>
             </div>
           </td>
         </tr>

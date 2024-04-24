@@ -1,11 +1,11 @@
 import { useState, useContext } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import httpClient from '../../../services/httpInterceptor';
 import { AuthContext } from '../../../contexts/AuthContext';
+import { login } from '../../../services/authService';
 
 const Login = () => {
   const [formState, setformState] = useState({
-    userName: '',
+    username: '',
     password: '',
   });
   const [formStateError, setformStateError] = useState({});
@@ -13,21 +13,19 @@ const Login = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const { login } = useContext(AuthContext);
+  const { loginContext } = useContext(AuthContext);
 
   const handleSubmit = async () => {
-    const { data } = await httpClient.post(
-      '/api/auth/login',
-      JSON.stringify(formState)
-    );
+    const { username, password } = formState;
+    const result = await login(username, password);
 
-    if (data.status === 200) {
-      login(data.d);
+    if (result.success) {
+      loginContext(result.data);
       let navigateUrl = searchParams.get('returnUrl');
       if (!navigateUrl) navigateUrl = '/';
       navigate(navigateUrl);
-    } else if (data.status === 400) {
-      setformStateError(data.errors);
+    } else if (result.code === '400') {
+      setformStateError(result.errors);
     }
   };
 
@@ -55,20 +53,20 @@ const Login = () => {
       )}
       <form>
         <div className="form-group">
-          <label htmlFor="userName" className="form-label">
+          <label htmlFor="username" className="form-label">
             Usuario
           </label>
           <input
-            id="userName"
+            id="username"
             type="text"
             className={`form-control ${
-              formStateError.userName ? 'is-invalid' : ''
+              formStateError.username ? 'is-invalid' : ''
             }`}
             onChange={handleOnChange}
-            value={formState.userName}
+            value={formState.username}
           />
-          {formStateError.userName &&
-            formStateError.userName.map((x, index) => (
+          {formStateError.username &&
+            formStateError.username.map((x, index) => (
               <div className="invalid-feedback" key={index}>
                 {x}
               </div>
@@ -113,9 +111,7 @@ const Login = () => {
       </form>
 
       <br />
-      <Link to="/register">
-        Crear una cuenta
-      </Link>
+      <Link to="/register">Crear una cuenta</Link>
     </>
   );
 };

@@ -26,7 +26,7 @@ function UserAddOrUpdate() {
     async function fetchUser() {
       const result = await httpClient.get(`/api/${entityPath}/${entityId}`);
       if (result.data.status === 200) {
-        const data = result.data.d;
+        const data = result.data.data;
         data.roleIsAdmin = data.roles.includes('Administrator');
         data.roleIsManager = data.roles.includes('Manager');
         setData(data);

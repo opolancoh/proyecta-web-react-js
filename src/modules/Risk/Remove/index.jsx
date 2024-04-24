@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { getById, remove } from '../../../services/riskService';
 import { entityPath } from '..';
 import { dateToLocaleString } from '../../../helpers/date-helper';
 import NotFound from '../../../pages/NotFound';
-import httpClient from '../../../services/httpInterceptor';
 import Loading from '../../../components/Loading';
 
 export default function UserRemove() {
@@ -16,12 +16,15 @@ export default function UserRemove() {
 
   useEffect(() => {
     async function fetchItem(itemId) {
-      const result = await httpClient.get(`/api/${entityPath}/${itemId}`);
-      if (result.data.status === 200) {
-        setData(result.data.data);
-      } else if (result.data.status === 404) setData(null);
-      else {
-        setRequestHasError(true);
+      const result = await getById(itemId);
+
+      if (result.success) {
+        setData(result.data);
+      } else {
+        if (result.data.code === '404') setData(null);
+        else {
+          setRequestHasError(true);
+        }
       }
       setIsLoading(false);
     }
@@ -31,13 +34,13 @@ export default function UserRemove() {
 
   const handleSubmit = async () => {
     // Send request
-    const result = await httpClient.delete(`/api/${entityPath}/${entityId}`);
-    if (result.data.status === 200) {
+    const result = await remove(entityId);
+    if (result.success) {
       navigate(`/${entityPath}`, {
         state: {
           notification: {
             action: 'success',
-            message: `Usuario eliminado correctamente.`,
+            message: `Elemento eliminado correctamente.`,
           },
         },
       });
@@ -60,7 +63,7 @@ export default function UserRemove() {
   return (
     <>
       <h1>Eliminar</h1>
-      <h4>Usuario</h4>
+      <h4>Riesgo</h4>
       <h4>Está seguro de eliminar este elemento?</h4>
       <div className="d-flex gap-2 mb-3">
         <Link to={`/${entityPath}`}>Volver a la lista</Link>
@@ -68,14 +71,14 @@ export default function UserRemove() {
       <hr />
 
       <dl className="row">
-        <dt className="col-sm-1">Usuario:</dt>
-        <dd className="col-sm-11">{data.userName}</dd>
         <dt className="col-sm-1">Nombre:</dt>
-        <dd className="col-sm-11">{data.firstName}</dd>
-        <dt className="col-sm-1">Apellido:</dt>
-        <dd className="col-sm-11">{data.lastName}</dd>
-        <dt className="col-sm-1">Roles:</dt>
-        <dd className="col-sm-11"> {data.roles.join(', ')} </dd>
+        <dd className="col-sm-11">{data.name}</dd>
+        <dt className="col-sm-1">Código:</dt>
+        <dd className="col-sm-11">{data.code}</dd>
+        <dt className="col-sm-1">Dueño:</dt>
+        <dd className="col-sm-11">{data.owner.name}</dd>
+        <dt className="col-sm-1">Fase:</dt>
+        <dd className="col-sm-11"> {data.phase} </dd>
       </dl>
       <dl className="row">
         <dt className="col-sm-1">Creado:</dt>

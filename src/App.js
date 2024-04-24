@@ -19,6 +19,7 @@ import UserDetails from './modules/User/Details';
 import UserAddOrUpdate from './modules/User/AddOrUpdate';
 import UserRemove from './modules/User/Remove';
 import RiskAddOrUpdate from './modules/Risk/AddOrUpdate';
+import RiskRemove from './modules/Risk/Remove';
 
 function App() {
   return (
@@ -34,13 +35,14 @@ function App() {
                 <Route path="new" element={<RiskAddOrUpdate />} /> 
                 <Route path=":entityId" element={<RiskDetails />} />
                 <Route path=":entityId/edit" element={<RiskAddOrUpdate />} /> 
+                <Route path=":entityId/remove" element={<RiskRemove />} />   
               </Route>
               <Route path="/users">
                 <Route index element={<UserIndex />} />
                 <Route path="new" element={<UserAddOrUpdate />} />
                 <Route path=":entityId" element={<UserDetails />} />    
                 <Route path=":entityId/edit" element={<UserAddOrUpdate />} />                            
-                <Route path=":entityId/delete" element={<UserRemove />} />                
+                <Route path=":entityId/remove" element={<UserRemove />} />                
               </Route>
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />

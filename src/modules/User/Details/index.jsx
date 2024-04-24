@@ -18,7 +18,7 @@ function UserDetails() {
     async function fetchUser() {
       const result = await httpClient.get(`/api/${entityPath}/${entityId}`);
       if (result.data.status === 200) {
-        setData(result.data.d);
+        setData(result.data.data);
       } else if (result.data.status === 404) setData(null);
       else {
         setRequestHasError(true);

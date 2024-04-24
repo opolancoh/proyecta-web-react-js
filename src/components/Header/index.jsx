@@ -2,9 +2,21 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
+import { logout } from '../../services/authService';
 
 function Header() {
-  const { isAuthenticated, user, logout } = useContext(AuthContext);
+  const { isAuthenticated, user, logoutContext } = useContext(AuthContext);
+
+  const logoutHandler = async () => {
+    const accessToken = localStorage.getItem('access_token');
+    const refreshToken = localStorage.getItem('refresh_token');
+
+    const result = await logout( accessToken, refreshToken );
+    if (!result.success) {
+      console.warn(`[logoutHandler] ${result.message}`);
+    }
+    logoutContext();
+  };
 
   return (
     <header>
@@ -79,7 +91,11 @@ function Header() {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link text-dark" href="#" onClick={logout}>
+                    <a
+                      className="nav-link text-dark"
+                      href="#"
+                      onClick={logoutHandler}
+                    >
                       Cerrar sesión
                     </a>
                   </li>

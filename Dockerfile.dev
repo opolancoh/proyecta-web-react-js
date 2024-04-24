@@ -18,7 +18,7 @@ ARG API_URL
 ENV REACT_APP_API_URL=$API_URL
 RUN echo "REACT_APP_API_URL is '${REACT_APP_API_URL}'"
 
-# CRA uses port 3000 by default, expose it to the host
+# Expose the port to the host
 EXPOSE 3000
 
 # Start development server

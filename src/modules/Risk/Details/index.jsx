@@ -2,10 +2,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import {getById} from '../../../services/riskService';
 import { entityPath } from '..';
 import { dateToLocaleString } from '../../../helpers/date-helper';
 import NotFound from '../../../pages/NotFound';
-import httpClient from '../../../services/httpInterceptor';
 import {
   getRiskManageabilityName,
   getRiskPhaseName,
@@ -22,10 +22,10 @@ function RiskDetails() {
 
   useEffect(() => {
     async function fetchRisk() {
-      const result = await httpClient.get(`/api/${entityPath}/${entityId}`);
-      if (result.data.status === 200) {
-        setData(result.data.d);
-      } else if (result.data.status === 404) setData(null);
+      const result = await getById(entityId);
+      if (result.success) {
+        setData(result.data);
+      } else if (result.code === '404') setData(null);
       else {
         setRequestHasError(true);
       }

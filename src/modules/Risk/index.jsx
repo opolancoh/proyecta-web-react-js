@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { getAll } from '../../services/riskService.js';
 import Table from './Table';
 import MinimalActionToast from '../../components/MinimalActionToast';
-import httpClient from '../../services/httpInterceptor.js';
 import Loading from '../../components/Loading';
 
 export const entityPath = 'risks';
@@ -17,8 +17,8 @@ function RiskIndex() {
 
   useEffect(() => {
     async function fetchData() {
-      const result = await httpClient.get(`/api/${entityPath}`);
-      setData(result.data.d);
+      const result = await getAll();
+      setData(result.data);
       setIsLoading(false);
     }
 

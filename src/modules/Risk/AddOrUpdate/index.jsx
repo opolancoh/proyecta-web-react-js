@@ -1,10 +1,13 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { add, update, getById } from '../../../services/riskService';
+import { getAll as getAllCategories } from '../../../services/riskCategoryService';
+import { getAll as getAllOwners } from '../../../services/riskOwnerService';
+import { getAll as getAllTreatments } from '../../../services/riskTreatmentService';
 import MinimalActionToast from '../../../components/MinimalActionToast';
 import { entityPath } from '..';
 import NotFound from '../../../pages/NotFound';
-import httpClient from '../../../services/httpInterceptor';
 import {
   getRiskTypeNames,
   getRiskPhaseNames,
@@ -44,39 +47,34 @@ function RiskAddOrUpdate() {
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
-    const SelectDataUrls = [
-      '/api/riskcategories',
-      '/api/riskowners',
-      '/api/risktreatments',
-    ];
-    if (entityId) SelectDataUrls.push(`/api/${entityPath}/${entityId}`);
-
     const fetchSelectData = async () => {
       try {
-        const [categoryResult, owneryResult, treatmentResult, entityResult] =
-          await Promise.all(SelectDataUrls.map((url) => httpClient.get(url)));
+        const categoryResult = await getAllCategories();
+        const ownerResult = await getAllOwners();
+        const treatmentResult = await getAllTreatments();
 
         setSelectData({
           ...selectData,
-          category: categoryResult.data.d,
-          owner: owneryResult.data.d,
-          treatment: treatmentResult.data.d,
+          category: categoryResult.data,
+          owner: ownerResult.data,
+          treatment: treatmentResult.data,
         });
+
         if (entityId) {
-          console.log(entityResult.data);
-          const { d } = entityResult.data;
+          const entityResult = await getById(entityId);
+          const { data } = entityResult;
           setData({
-            name: d.name,
-            code: d.code,
-            category: d.category.id,
-            type: d.type,
-            owner: d.owner.id,
-            phase: d.phase,
-            manageability: d.manageability,
-            treatment: d.treatment.id,
-            dateFrom: d.dateFrom,
-            dateTo: d.dateTo,
-            state: d.state,
+            name: data.name,
+            code: data.code,
+            category: data.category.id,
+            type: data.type,
+            owner: data.owner.id,
+            phase: data.phase,
+            manageability: data.manageability,
+            treatment: data.treatment.id,
+            dateFrom: data.dateFrom,
+            dateTo: data.dateTo,
+            state: data.state,
           });
         }
 
@@ -98,12 +96,10 @@ function RiskAddOrUpdate() {
     }
 
     // Send request
-    const resultPromise = entityId
-      ? httpClient.put(`/api/${entityPath}/${entityId}`, data)
-      : httpClient.post(`/api/${entityPath}`, data);
+    const resultPromise = entityId ? update(entityId, data) : add(data);
     const result = await resultPromise;
 
-    if ([200, 201, 204].includes(result.data.status)) {
+    if (result.success) {
       navigate(`/${entityPath}`, {
         state: {
           notification: {
@@ -114,13 +110,15 @@ function RiskAddOrUpdate() {
           },
         },
       });
-    } else if ([400].includes(result.data.status)) {
-      setNotification({
-        action: 'error',
-        message: result.data.errors[0].description,
-      });
     } else {
-      setRequestHasError(true);
+      if (result.code === '400') {
+        setNotification({
+          action: 'error',
+          message: result.errors[0].description,
+        });
+      } else {
+        setRequestHasError(true);
+      }
     }
   };
 
