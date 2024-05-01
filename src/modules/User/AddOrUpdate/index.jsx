@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { add, update, getById } from '../../../services/userService';
 import MinimalActionToast from '../../../components/MinimalActionToast';
 import { entityPath } from '..';
 import NotFound from '../../../pages/NotFound';
-import httpClient from '../../../services/httpInterceptor';
 import Loading from '../../../components/Loading';
 
 function UserAddOrUpdate() {
@@ -23,21 +23,31 @@ function UserAddOrUpdate() {
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
-    async function fetchUser() {
-      const result = await httpClient.get(`/api/${entityPath}/${entityId}`);
-      if (result.data.status === 200) {
-        const data = result.data.data;
-        data.roleIsAdmin = data.roles.includes('Administrator');
-        data.roleIsManager = data.roles.includes('Manager');
-        setData(data);
-      } else if (result.data.status === 404) setData(null);
+    async function fetchData() {
+      const result = await getById(entityId);
+      if (result.success) {
+        const roleChecks = {
+          roleIsAdmin: 'ADMINISTRATOR',
+          roleIsManager: 'MANAGER',
+          roleIsEditor: 'EDITOR',
+          roleIsViewer: 'VIEWER'
+        };
+
+        Object.keys(roleChecks).forEach(key => {
+          result.data[key] = result.data.roles.some(
+            role => role.name.toUpperCase() === roleChecks[key]
+          );
+        });
+
+        setData(result.data);
+      } else if (result.code === '404') setData(null);
       else {
         setRequestHasError(true);
       }
       setIsLoading(false);
     }
 
-    if (entityId) fetchUser();
+    if (entityId) fetchData();
     else setIsLoading(false);
   }, [entityId]);
 
@@ -46,39 +56,46 @@ function UserAddOrUpdate() {
     const roles = [];
     if (data.roleIsAdmin) roles.push('Administrator');
     if (data.roleIsManager) roles.push('Manager');
+    if (data.roleIsEditor) roles.push('Editor');
+    if (data.roleIsViewer) roles.push('Viewer');
 
+    const userName = data.userName.trim();
+    const firstName = data.firstName.trim();
+    const lastName = data.lastName.trim();
+    const displayName = data.displayName.trim();
     const body = {
-      userName: data.userName,
-      firstName: data.firstName,
-      lastName: data.lastName,
+      userName,
+      firstName,
+      lastName,
+      displayName,
       roles,
     };
     if (!entityId) body.password = data.password;
 
     // Send request
-    const resultPromise = entityId
-      ? httpClient.put(`/api/${entityPath}/${entityId}`, body)
-      : httpClient.post(`/api/${entityPath}`, body);
+    const resultPromise = entityId ? update(entityId, body) : add(body);
     const result = await resultPromise;
 
-    if ([200, 201].includes(result.data.status)) {
+    if (result.success) {
       navigate(`/${entityPath}`, {
         state: {
           notification: {
             action: 'success',
-            message: `Usuario ${
+            message: `Elemento ${
               entityId ? 'actualizado' : 'creado'
             } correctamente.`,
           },
         },
       });
-    } else if ([400].includes(result.data.status)) {
-      setNotification({
-        action: 'error',
-        message: result.data.errors[0].description,
-      });
     } else {
-      setRequestHasError(true);
+      if (result.code === '400') {
+        setNotification({
+          action: 'error',
+          message: result.errors[0].description,
+        });
+      } else {
+        setRequestHasError(true);
+      }
     }
   };
 
@@ -140,6 +157,18 @@ function UserAddOrUpdate() {
           />
         </div>
         <div className="col-md-6">
+          <label htmlFor="displayName" className="form-label">
+            Nombre a mostrar
+          </label>
+          <input
+            id="displayName"
+            type="text"
+            className="form-control"
+            value={data.displayName}
+            onChange={handleOnChange}
+          />
+        </div>
+        <div className="col-md-6">
           <label htmlFor="userName" className="form-label">
             Usuario
           </label>
@@ -189,6 +218,30 @@ function UserAddOrUpdate() {
             />
             <label className="form-check-label" htmlFor="roleIsManager">
               Gerente
+            </label>
+          </div>
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id="roleIsEditor"
+              checked={data.roleIsEditor}
+              onChange={handleOnChange}
+            />
+            <label className="form-check-label" htmlFor="roleIsEditor">
+              Editor
+            </label>
+          </div>
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id="roleIsViewer"
+              checked={data.roleIsViewer}
+              onChange={handleOnChange}
+            />
+            <label className="form-check-label" htmlFor="roleIsViewer">
+              Visitante
             </label>
           </div>
         </div>

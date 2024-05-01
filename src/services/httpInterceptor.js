@@ -45,12 +45,12 @@ httpClient.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
+    // Handle a 401 status code and try to get a new token
     if (
       error.response &&
       error.response.status === 401 &&
       !originalRequest._retry
     ) {
-      // Try to get a new token
       const refreshToken = localStorage.getItem('refresh_token');
       const accessToken = localStorage.getItem('access_token');
       if (accessToken && refreshToken) {
@@ -89,10 +89,15 @@ httpClient.interceptors.response.use(
       originalRequest._retry
     ) {
       // If the token was already refreshed and still getting 401
-      const returnUrl = originalRequest.lastRequestLocation || '/';
-      window.location = `/login?returnUrl=${encodeURIComponent(returnUrl)}`;
+      // const returnUrl = originalRequest.lastRequestLocation || '/';
+      // window.location = `/login?returnUrl=${encodeURIComponent(returnUrl)}`;
+      return Promise.reject(error);
+    } else {
+      // Default error handler
+      // window.location.assign(`/error`);
+      console.log(`Interceptor: ${error}`);
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
   }
 );
 

@@ -8,6 +8,7 @@ function Table({ children }) {
           <th scope="col">Usuario</th>
           <th scope="col">Nombre</th>
           <th scope="col">Apellido</th>
+          <th scope="col">Nombre a mostrar</th>
           <th scope="col">Roles</th>
           <th scope="col"></th>
         </tr>
@@ -57,6 +58,7 @@ function UserTable({ entityPath, data, isLoading }) {
           <th scope="row">{x.userName}</th>
           <td>{x.firstName}</td>
           <td>{x.lastName}</td>
+          <td>{x.displayName}</td>
           <td>
             {x.roles.map((role) => (
               <span key={role} className="badge text-bg-secondary me-1">

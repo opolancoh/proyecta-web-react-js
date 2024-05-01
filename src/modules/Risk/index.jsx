@@ -14,11 +14,17 @@ function RiskIndex() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [notification, setNotification] = useState(null);
+  const [requestHasError, setRequestHasError] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
       const result = await getAll();
-      setData(result.data);
+      if (result.success) {
+        setData(result.data);
+      } else if (result.code === '404') setData(null);
+      else {
+        setRequestHasError(true);
+      }
       setIsLoading(false);
     }
 
@@ -35,6 +41,11 @@ function RiskIndex() {
   };
 
   if (isLoading) return <Loading />;
+
+  if (requestHasError) {
+    navigate('/error');
+    return null;
+  }
 
   return (
     <>

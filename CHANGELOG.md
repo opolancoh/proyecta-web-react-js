@@ -1,43 +1,44 @@
-# Change Log
+# Changelog
 
-All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
+All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2024-05-01 (Beta Release)
 
-<a name="0.4.0"></a>
-## [0.4.0](https://github.com/opolancoh/proyecta-webapp-react/releases/tag/v0.3.0) (2024-04-23)
+### Added
+- Support CreatedBy and UpdatedBy data.
+- Minor improvements.
 
-### Features
-
-* Support refresh token
-* Add API services
-
-<a name="0.3.0"></a>
-## [0.3.0](https://github.com/opolancoh/proyecta-webapp-react/releases/tag/v0.3.0) (2024-04-16)
-
-### Features
-
-* Add docker containers
+### Fixed
+- Minor fixes.
 
 
-<a name="0.2.0"></a>
-## [0.2.0](https://github.com/opolancoh/proyecta-webapp-react/releases/tag/v0.2.0) (2024-04-11)
+## [0.4.0] - 2024-04-23 (Beta Release)
 
-### Features
-
-* Print app version in the footer
-* Add 'Help' menu
-* Pages
-  - AppInformation
-  - ApiInformation
-* Handle nework issues
-* Improvements and fixes
+### Added
+- Support refresh token.
+- Added API services.
 
 
-<a name="0.1.0"></a>
-## [0.1.0](https://github.com/opolancoh/proyecta-webapp-react/releases/tag/v0.1.0) (2024-04-10)
+## [0.3.0] - 2024-04-16 (Beta Release)
 
-### Features
-
-* Initial version
+### Added
+- Added docker containers.
 
 
+## [0.2.0] - 2024-04-11 (Beta Release)
+
+### Added
+- Print app version in the footer.
+- Add 'Help' menu.
+- Added information pages
+ - AppInformation
+ - ApiInformation
+
+### Fixed
+- Handle nework issues.
+
+
+## [0.1.0] - 2024-04-10 (Beta Release)
+
+### Added
+- Initial version.

@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import { logout } from '../../services/authService';
 
 function Header() {
+  const navigate = useNavigate();
   const { isAuthenticated, user, logoutContext } = useContext(AuthContext);
 
   const logoutHandler = async () => {
@@ -13,9 +14,10 @@ function Header() {
 
     const result = await logout( accessToken, refreshToken );
     if (!result.success) {
-      console.warn(`[logoutHandler] ${result.message}`);
+      console.error(`[logoutHandler] ${result.message}`);
     }
     logoutContext();
+    navigate('/login');
   };
 
   return (
@@ -87,7 +89,7 @@ function Header() {
                 <>
                   <li className="nav-item">
                     <Link className="nav-link text-dark" to="/">
-                      Bienvenido, {user.username}!
+                      Bienvenido, {user.name}!
                     </Link>
                   </li>
                   <li className="nav-item">

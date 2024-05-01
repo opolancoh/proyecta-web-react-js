@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import {getById} from '../../../services/riskService';
+import { getById, remove } from '../../../services/riskService';
 import { entityPath } from '..';
 import { dateToLocaleString } from '../../../helpers/date-helper';
 import NotFound from '../../../pages/NotFound';
@@ -21,18 +21,21 @@ function RiskDetails() {
   const [requestHasError, setRequestHasError] = useState(false);
 
   useEffect(() => {
-    async function fetchRisk() {
-      const result = await getById(entityId);
+    async function fetchItem(itemId) {
+      const result = await getById(itemId);
+
       if (result.success) {
         setData(result.data);
-      } else if (result.code === '404') setData(null);
-      else {
-        setRequestHasError(true);
+      } else {
+        if (result.data.code === '404') setData(null);
+        else {
+          setRequestHasError(true);
+        }
       }
       setIsLoading(false);
     }
 
-    fetchRisk();
+    fetchItem(entityId);
   }, [entityId]);
 
   if (isLoading) return <Loading />;
@@ -124,7 +127,11 @@ function RiskDetails() {
         <div className="col-md-6">
           <div className="d-block">
             <strong className="d-block h5 mb-0">Estado</strong>
-            <span className={`badge text-bg-${data.state ? 'primary' : 'secondary'}`}>
+            <span
+              className={`badge text-bg-${
+                data.state ? 'primary' : 'secondary'
+              }`}
+            >
               {data.state ? 'Activo' : 'Inactivo'}
             </span>
           </div>
@@ -133,9 +140,16 @@ function RiskDetails() {
       <br />
       <dl className="row">
         <dt className="col-sm-1">Creado:</dt>
-        <dd className="col-sm-11">{dateToLocaleString(data.createdAt)}</dd>
+        <dd className="col-sm-11">
+          {dateToLocaleString(data.createdAt)} por{' '}
+          {data.createdBy.name || 'No definido'}
+        </dd>
         <dt className="col-sm-1">Modificado:</dt>
-        <dd className="col-sm-11">{dateToLocaleString(data.updatedAt)}</dd>
+        <dd className="col-sm-11">
+          {`${dateToLocaleString(data.updatedAt)} por ${
+            data.updatedBy.name || 'No definido'
+          }`}
+        </dd>
       </dl>
     </>
   );

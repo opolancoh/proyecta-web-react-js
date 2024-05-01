@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { getById } from '../../../services/userService';
 import { entityPath } from '..';
 import { dateToLocaleString } from '../../../helpers/date-helper';
 import NotFound from '../../../pages/NotFound';
-import httpClient from '../../../services/httpInterceptor';
 import Loading from '../../../components/Loading';
 
 function UserDetails() {
@@ -15,18 +15,18 @@ function UserDetails() {
   const [requestHasError, setRequestHasError] = useState(false);
 
   useEffect(() => {
-    async function fetchUser() {
-      const result = await httpClient.get(`/api/${entityPath}/${entityId}`);
-      if (result.data.status === 200) {
-        setData(result.data.data);
-      } else if (result.data.status === 404) setData(null);
+    async function fetchData() {
+      const result = await getById(entityId);
+      if (result.success) {
+        setData(result.data);
+      } else if (result.code === '404') setData(null);
       else {
         setRequestHasError(true);
       }
       setIsLoading(false);
     }
 
-    fetchUser();
+    fetchData();
   }, [entityId]);
 
   if (isLoading) return <Loading />;
@@ -36,6 +36,7 @@ function UserDetails() {
   }
 
   if (requestHasError) {
+    console.log('requestHasError');
     navigate('/error');
     return null;
   }
@@ -57,14 +58,24 @@ function UserDetails() {
         <dd className="col-sm-11">{data.firstName}</dd>
         <dt className="col-sm-1">Apellido:</dt>
         <dd className="col-sm-11">{data.lastName}</dd>
+        <dt className="col-sm-1">Nombre a mostrar:</dt>
+        <dd className="col-sm-11">{data.displayName}</dd>
         <dt className="col-sm-1">Roles:</dt>
-        <dd className="col-sm-11"> {data.roles.join(', ')} </dd>
+        <dd className="col-sm-11">
+          {data.roles.map((x) => x.name).join(', ')}
+        </dd>
       </dl>
       <dl className="row">
         <dt className="col-sm-1">Creado:</dt>
-        <dd className="col-sm-11">{dateToLocaleString(data.createdAt)}</dd>
+        <dd className="col-sm-11">
+          {dateToLocaleString(data.createdAt)} por{' '}
+          {data.createdBy.name || 'No definido'}
+        </dd>
         <dt className="col-sm-1">Modificado:</dt>
-        <dd className="col-sm-11">{dateToLocaleString(data.updatedAt)}</dd>
+        <dd className="col-sm-11">
+          {dateToLocaleString(data.updatedAt)} por{' '}
+          {data.updatedBy.name || 'No definido'}
+        </dd>
       </dl>
     </>
   );

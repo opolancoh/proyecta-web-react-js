@@ -82,9 +82,15 @@ export default function UserRemove() {
       </dl>
       <dl className="row">
         <dt className="col-sm-1">Creado:</dt>
-        <dd className="col-sm-11">{dateToLocaleString(data.createdAt)}</dd>
+        <dd className="col-sm-11">
+          {dateToLocaleString(data.createdAt)} por{' '}
+          {data.createdBy.name || 'No definido'}
+        </dd>
         <dt className="col-sm-1">Modificado:</dt>
-        <dd className="col-sm-11">{dateToLocaleString(data.updatedAt)}</dd>
+        <dd className="col-sm-11">
+          {dateToLocaleString(data.updatedAt)} por{' '}
+          {data.updatedBy.name || 'No definido'}
+        </dd>
       </dl>
 
       <div className="row">

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { getAll } from '../../services/userService.js';
 import MinimalActionToast from '../../components/MinimalActionToast';
 import Table from './Table';
-import httpClient from '../../services/httpInterceptor.js';
+
 import Loading from '../../components/Loading';
 
 export const entityPath = 'users';
@@ -13,12 +14,18 @@ function UserIndex() {
   const { state } = useLocation();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [requestHasError, setRequestHasError] = useState(false);
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
-      const result = await httpClient.get(`/api/${entityPath}`);
-      setData(result.data.data);
+      const result = await getAll();
+      if (result.success) {
+        setData(result.data);
+      } else if (result.code === '404') setData(null);
+      else {
+        setRequestHasError(true);
+      }
       setIsLoading(false);
     }
 
@@ -35,6 +42,11 @@ function UserIndex() {
 
   if (isLoading) return <Loading />;
 
+  if (requestHasError) {
+    navigate('/error');
+    return null;
+  }
+
   return (
     <>
       <h1>Usuarios</h1>
@@ -43,7 +55,7 @@ function UserIndex() {
       </p>
 
       <Table entityPath={entityPath} data={data} isLoading={isLoading} />
-      
+
       {notification !== null ? (
         <MinimalActionToast
           action={notification.action}

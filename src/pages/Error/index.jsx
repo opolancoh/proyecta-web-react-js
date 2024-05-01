@@ -6,9 +6,7 @@ function Error() {
         An error occurred while processing your request.
       </h2>
 
-      <p>
-        <strong>Request ID:</strong> <code>Add a request ID here.</code>
-      </p>
+      {/* Todo: Add a message and request id in the error page. <p><strong>Request ID:</strong> <code>Add a request ID here.</code>      </p> */}
     </>
   );
 }
