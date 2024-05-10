@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { getById, remove } from '../../../services/riskService';
+import { getById } from '../../../services/riskService';
 import { entityPath } from '..';
 import { dateToLocaleString } from '../../../helpers/date-helper';
 import NotFound from '../../../pages/NotFound';

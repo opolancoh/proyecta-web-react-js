@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import httpClient from '../../services/httpInterceptor';
+import { getSystemInfo } from '../../services/apiInformationService';
 import Loading from '../../components/Loading';
 
 function ApiInfo() {
@@ -10,19 +10,19 @@ function ApiInfo() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function fetchDotNetInfo() {
-      const { data } = await httpClient.get('/system-info');
+    async function fetchSystemInfo() {
+      const result = await getSystemInfo();
 
-      if (data.status === 200) {
-        setData(data.d);
-      } else if (data.status === 404) setData(null);
+      if (result.success) {
+        setData(result.data);
+      } else if (result.code === '404') setData(null);
       else {
         setRequestHasError(true);
       }
       setIsLoading(false);
     }
 
-    fetchDotNetInfo();
+    fetchSystemInfo();
   }, []);
 
   if (isLoading) return <Loading />;
