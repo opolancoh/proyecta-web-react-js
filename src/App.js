@@ -7,8 +7,9 @@ import NotFound from './pages/NotFound';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import About from './pages/About';
-import AppInfo from './pages/AppInformation';
-import ApiInfo from './pages/ApiInformation';
+import AppInfo from './pages/InformationApp';
+import ApiServerInfo from './pages/InformationApiServer';
+import ApiSystemInfo from './pages/InformationApiSystem';
 import Error from './pages/Error';
 import UserIndex from './modules/User';
 import Register from './pages/Auth/Register';
@@ -48,7 +49,8 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/about" element={<About />} />
               <Route path="/app-info" element={<AppInfo />} />
-              <Route path="/api-info" element={<ApiInfo />} />
+              <Route path="/api-server-info" element={<ApiServerInfo />} />
+              <Route path="/api-system-info" element={<ApiSystemInfo />} />
               <Route path="/error" element={<Error />} />
               <Route path="/forbidden" element={<Forbidden />} />
               <Route path="*" element={<NotFound />} />

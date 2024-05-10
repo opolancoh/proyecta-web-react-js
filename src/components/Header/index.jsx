@@ -12,7 +12,7 @@ function Header() {
     const accessToken = localStorage.getItem('access_token');
     const refreshToken = localStorage.getItem('refresh_token');
 
-    const result = await logout( accessToken, refreshToken );
+    const result = await logout(accessToken, refreshToken);
     if (!result.success) {
       console.error(`[logoutHandler] ${result.message}`);
     }
@@ -73,12 +73,17 @@ function Header() {
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/app-info">
-                      Información de la APP
+                      Información de la aplicación (React)
                     </Link>
                   </li>
                   <li>
-                    <Link className="dropdown-item" to="/api-info">
-                      Información de la API
+                    <Link className="dropdown-item" to="/api-server-info">
+                      Información del servidor (API)
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/api-system-info">
+                      Información del sistema (API)
                     </Link>
                   </li>
                 </ul>

@@ -92,6 +92,8 @@ httpClient.interceptors.response.use(
       // const returnUrl = originalRequest.lastRequestLocation || '/';
       // window.location = `/login?returnUrl=${encodeURIComponent(returnUrl)}`;
       return Promise.reject(error);
+    } else if (error.response.status === 403) {
+      window.location = `/forbidden`;
     } else {
       // Default error handler
       // window.location.assign(`/error`);

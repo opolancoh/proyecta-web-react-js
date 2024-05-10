@@ -1,9 +1,15 @@
 import httpClient from './httpInterceptor';
 
-const basePath = '/system-info';
+const basePath = '/info';
+
+export const getServerInfo = async () => {
+  const { data } = await httpClient.get(`${basePath}/server`);
+
+  return data;
+};
 
 export const getSystemInfo = async () => {
-  const { data } = await httpClient.get(`${basePath}`);
+  const { data } = await httpClient.get(`${basePath}/system`);
 
   return data;
 };

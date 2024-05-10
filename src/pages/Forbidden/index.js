@@ -1,8 +1,8 @@
 function Forbidden() {
   return (
     <>
-      <h1>403: Forbidden</h1>
-      <p>You do not have permission to access this resource.</p>
+      <h1>403: Acceso no permitido</h1>
+      <p>No tiene los permisos para acceder a este recurso.</p>
     </>
   );
 }
