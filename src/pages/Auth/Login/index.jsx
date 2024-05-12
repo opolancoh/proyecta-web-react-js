@@ -8,7 +8,7 @@ const Login = () => {
     username: '',
     password: '',
   });
-  const [formStateError, setformStateError] = useState({});
+  const [errors, setErrors] = useState({});
 
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -24,8 +24,8 @@ const Login = () => {
       let navigateUrl = searchParams.get('returnUrl');
       if (!navigateUrl) navigateUrl = '/';
       navigate(navigateUrl);
-    } else if (result.code === '400') {
-      setformStateError(result.errors);
+    } else {
+      setErrors(result.errors);
     }
   };
 
@@ -42,9 +42,9 @@ const Login = () => {
       <h1>Inicio de sesión</h1>
       <p>Usa tu cuenta.</p>
       <br />
-      {formStateError._ && (
+      {errors._ && (
         <ul>
-          {formStateError._.map((x) => (
+          {errors._.map((x) => (
             <li key={x} className="text-danger">
               {x}
             </li>
@@ -59,14 +59,12 @@ const Login = () => {
           <input
             id="username"
             type="text"
-            className={`form-control ${
-              formStateError.username ? 'is-invalid' : ''
-            }`}
+            className={`form-control ${errors.username ? 'is-invalid' : ''}`}
             onChange={handleOnChange}
             value={formState.username}
           />
-          {formStateError.username &&
-            formStateError.username.map((x, index) => (
+          {errors.username &&
+            errors.username.map((x, index) => (
               <div className="invalid-feedback" key={index}>
                 {x}
               </div>
@@ -79,15 +77,13 @@ const Login = () => {
           </label>
           <input
             type="password"
-            className={`form-control ${
-              formStateError.password ? 'is-invalid' : ''
-            }`}
+            className={`form-control ${errors.password ? 'is-invalid' : ''}`}
             id="password"
             onChange={handleOnChange}
             value={formState.password}
           />
-          {formStateError.password &&
-            formStateError.password.map((x, index) => (
+          {errors.password &&
+            errors.password.map((x, index) => (
               <div className="invalid-feedback" key={index}>
                 {x}
               </div>

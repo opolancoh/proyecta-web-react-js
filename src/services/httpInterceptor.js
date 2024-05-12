@@ -92,13 +92,14 @@ httpClient.interceptors.response.use(
       // const returnUrl = originalRequest.lastRequestLocation || '/';
       // window.location = `/login?returnUrl=${encodeURIComponent(returnUrl)}`;
       return Promise.reject(error);
-    } else if (error.response.status === 403) {
+    } else if (error.response && error.response.status === 403) {
       window.location = `/forbidden`;
     } else {
       // Default error handler
       // window.location.assign(`/error`);
-      console.log(`Interceptor: ${error}`);
-      return Promise.reject(error);
+      console.log(`Request error: '${error}'`);
+      window.location = `/error`;
+      // return Promise.reject(error);
     }
   }
 );
