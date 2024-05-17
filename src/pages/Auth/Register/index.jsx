@@ -1,130 +1,165 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { register } from '../../../services/authService';
+import Loading from '../../../components/Loading';
+import formValidation from './formValidation';
+import { AuthContext } from '../../../contexts/AuthContext';
 
 function Register() {
-  // const [isLoading, setIsLoading] = useState(true);
-  const [formState, setformState] = useState({
+  const [data, setData] = useState({
     firstName: '',
     lastName: '',
-    userName: '',
+    displayName: '',
+    username: '',
     password: '',
   });
-  const [formStateError, setformStateError] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
-  // console.log(formStateError);
+  const navigate = useNavigate();
+  const { loginContext } = useContext(AuthContext);
 
   const handleSubmit = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/auth/users/register`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formState),
-      }
-    );
-    const json = await response.json();
-    if (json.status === 400) {
-      setformStateError(json.errors);
+    const formErrors = formValidation(data);
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+      return;
     }
+
+    setIsLoading(true);
+    const result = await register(data);
+
+    if (result.success) {
+      loginContext(result.data);
+      navigate('/');
+    }
+
+    if (result.errors) setErrors(result.errors);
+    setIsLoading(false);
   };
 
   const handleOnChange = (event) => {
-    const target = event.currentTarget;
-    setformState({
-      ...formState,
-      [target.id]: target.value,
-    });
+    const { id, value } = event.target;
+
+    setData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+
+    // Validate the specific field
+    const fieldError = formValidation({ [id]: value });
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [id]: fieldError[id],
+    }));
   };
+
+  if (isLoading) return <Loading />;
 
   return (
     <>
       <h1>Registro</h1>
       <p>Crear una cuenta.</p>
       <br />
-      {formStateError._ && (
+      {errors._ && (
         <ul>
-          {formStateError._.map((x) => (
-            <li key={x} className="text-danger">{x}</li>
+          {errors._.map((x) => (
+            <li key={x} className="text-danger">
+              {x}
+            </li>
           ))}
         </ul>
       )}
       <form className="row g-3 needs-validation">
-        <div className="col-md-6">
+        <div className="col-md-4">
           <label htmlFor="firstName" className="form-label">
             Nombre
           </label>
           <input
             type="text"
-            className={`form-control ${
-              formStateError.firstName ? 'is-invalid' : ''
-            }`}
+            className={`form-control ${errors.firstName && 'is-invalid'}`}
             id="firstName"
             onChange={handleOnChange}
-            value={formState.firstName}
+            value={data.firstName}
           />
-          {formStateError.firstName &&
-            formStateError.firstName.map((x, index) => (
+          {errors.firstName &&
+            errors.firstName.map((x, index) => (
               <div className="invalid-feedback" key={index}>
                 {x}
               </div>
             ))}
         </div>
-        <div className="col-md-6">
+
+        <div className="col-md-4">
           <label htmlFor="lastName" className="form-label">
             Apellido
           </label>
           <input
             type="text"
-            className={`form-control ${
-              formStateError.lastName ? 'is-invalid' : ''
-            }`}
+            className={`form-control ${errors.lastName && 'is-invalid'}`}
             id="lastName"
             onChange={handleOnChange}
-            value={formState.lastName}
+            value={data.lastName}
           />
-          {formStateError.lastName &&
-            formStateError.lastName.map((x, index) => (
+          {errors.lastName &&
+            errors.lastName.map((x, index) => (
               <div className="invalid-feedback" key={index}>
                 {x}
               </div>
             ))}
         </div>
+
+        <div className="col-md-4">
+          <label htmlFor="displayName" className="form-label">
+            Nombre a mostrar
+          </label>
+          <input
+            type="text"
+            className={`form-control ${errors.displayName && 'is-invalid'}`}
+            id="displayName"
+            onChange={handleOnChange}
+            value={data.displayName}
+          />
+          {errors.displayName &&
+            errors.displayName.map((x, index) => (
+              <div className="invalid-feedback" key={index}>
+                {x}
+              </div>
+            ))}
+        </div>
+
         <div className="col-12">
-          <label htmlFor="userName" className="form-label">
+          <label htmlFor="username" className="form-label">
             Usuario
           </label>
           <input
             type="text"
-            className={`form-control ${
-              formStateError.userName ? 'is-invalid' : ''
-            }`}
-            id="userName"
+            className={`form-control ${errors.username && 'is-invalid'}`}
+            id="username"
             onChange={handleOnChange}
-            value={formState.userName}
+            value={data.userName}
           />
-          {formStateError.userName &&
-            formStateError.userName.map((x, index) => (
+          {errors.username &&
+            errors.username.map((x, index) => (
               <div className="invalid-feedback" key={index}>
                 {x}
               </div>
             ))}
         </div>
+
         <div className="col-12">
           <label htmlFor="password" className="form-label">
             Contraseña
           </label>
           <input
             type="password"
-            className={`form-control ${
-              formStateError.password ? 'is-invalid' : ''
-            }`}
+            className={`form-control ${errors.password && 'is-invalid'}`}
             id="password"
             onChange={handleOnChange}
-            value={formState.password}
+            value={data.password}
           />
-          {formStateError.password &&
-            formStateError.password.map((x, index) => (
+          {errors.password &&
+            errors.password.map((x, index) => (
               <div className="invalid-feedback" key={index}>
                 {x}
               </div>

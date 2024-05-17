@@ -41,7 +41,7 @@ function RiskAddOrUpdate() {
     manageability: getRiskManageabilityNames(),
     treatment: [],
   });
-  const [error, setError] = useState({});
+  const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [requestHasError, setRequestHasError] = useState(false);
   const [notification, setNotification] = useState(null);
@@ -89,9 +89,9 @@ function RiskAddOrUpdate() {
   }, [entityId]);
 
   const handleSubmit = async () => {
-    const formError = formValidation(data);
-    if (Object.keys(formError).length > 0) {
-      setError(formError);
+    const formErrors = formValidation(data);
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
       return;
     }
 
@@ -110,32 +110,36 @@ function RiskAddOrUpdate() {
           },
         },
       });
+    } else if (result.code === '400') {
+      setNotification({
+        action: 'error',
+        message: result.message,
+      });
+      setErrors(result.errors);
     } else {
-      if (result.code === '400') {
-        setNotification({
-          action: 'error',
-          message: result.errors[0].description,
-        });
-      } else {
-        setRequestHasError(true);
-      }
+      setNotification({
+        action: 'error',
+        message: result.message,
+      });
+
+      setRequestHasError(true);
     }
   };
 
   const handleOnChange = (event) => {
-    const newData = {
-      ...data,
-      [event.target.id]:
-        event.target.type === 'checkbox'
-          ? event.target.checked
-          : event.target.value,
-    };
-    setData(newData);
+    const { id, value, type, checked } = event.target;
+    const newValue = type === 'checkbox' ? checked : value;
+    setData((prevData) => ({
+      ...prevData,
+      [id]: newValue,
+    }));
 
-    const formError = formValidation(newData);
-    if (Object.keys(formError).length > 0) {
-      setError(formError);
-    }
+    // Validate the specific field
+    const fieldError = formValidation({ [id]: newValue });
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [id]: fieldError[id],
+    }));
   };
 
   const handleOnCloseNotification = () => {
@@ -166,7 +170,7 @@ function RiskAddOrUpdate() {
         data={data}
         selectData={selectData}
         handleOnChange={handleOnChange}
-        error={error}
+        errors={errors}
       />
 
       <br />

@@ -1,4 +1,4 @@
-function RiskForm({ data, selectData, handleOnChange, error }) {
+function RiskForm({ data, selectData, handleOnChange, errors }) {
   return (
     <div className="row g-3">
       <div className="col-md-6">
@@ -8,12 +8,18 @@ function RiskForm({ data, selectData, handleOnChange, error }) {
         <input
           id="name"
           type="text"
-          className={`form-control ${error.name && 'is-invalid'}`}
+          className={`form-control ${errors.name && 'is-invalid'}`}
           value={data.name}
           onChange={handleOnChange}
         />
-        {error.name && <div className="invalid-feedback">{error.name}</div>}
+        {errors.name &&
+          errors.name.map((x, index) => (
+            <div className="invalid-feedback" key={index}>
+              {x}
+            </div>
+          ))}
       </div>
+
       <div className="col-md-6">
         <label htmlFor="code" className="form-label">
           Código
@@ -21,19 +27,25 @@ function RiskForm({ data, selectData, handleOnChange, error }) {
         <input
           id="code"
           type="text"
-          className={`form-control ${error.code && 'is-invalid'}`}
+          className={`form-control ${errors.code && 'is-invalid'}`}
           value={data.code}
           onChange={handleOnChange}
         />
-        {error.code && <div className="invalid-feedback">{error.code}</div>}
+        {errors.code &&
+          errors.code.map((x, index) => (
+            <div className="invalid-feedback" key={index}>
+              {x}
+            </div>
+          ))}
       </div>
+
       <div className="col-md-4">
         <label htmlFor="category" className="form-label">
           Categoría
         </label>
         <select
           id="category"
-          className={`form-select ${error.category && 'is-invalid'}`}
+          className={`form-select ${errors.category && 'is-invalid'}`}
           value={data.category}
           onChange={handleOnChange}
         >
@@ -44,17 +56,21 @@ function RiskForm({ data, selectData, handleOnChange, error }) {
             </option>
           ))}
         </select>
-        {error.category && (
-          <div className="invalid-feedback">{error.category}</div>
-        )}
+        {errors.category &&
+          errors.category.map((x, index) => (
+            <div className="invalid-feedback" key={index}>
+              {x}
+            </div>
+          ))}
       </div>
+
       <div className="col-md-4">
         <label htmlFor="type" className="form-label">
           Tipo
         </label>
         <select
           id="type"
-          className={`form-select ${error.type && 'is-invalid'}`}
+          className={`form-select ${errors.type && 'is-invalid'}`}
           value={data.type}
           onChange={handleOnChange}
         >
@@ -65,15 +81,21 @@ function RiskForm({ data, selectData, handleOnChange, error }) {
             </option>
           ))}
         </select>
-        {error.type && <div className="invalid-feedback">{error.type}</div>}
+        {errors.type &&
+          errors.type.map((x, index) => (
+            <div className="invalid-feedback" key={index}>
+              {x}
+            </div>
+          ))}
       </div>
+
       <div className="col-md-4">
         <label htmlFor="owner" className="form-label">
           Dueño
         </label>
         <select
           id="owner"
-          className={`form-select ${error.owner && 'is-invalid'}`}
+          className={`form-select ${errors.owner && 'is-invalid'}`}
           value={data.owner}
           onChange={handleOnChange}
         >
@@ -84,15 +106,21 @@ function RiskForm({ data, selectData, handleOnChange, error }) {
             </option>
           ))}
         </select>
-        {error.owner && <div className="invalid-feedback">{error.owner}</div>}
+        {errors.owner &&
+          errors.owner.map((x, index) => (
+            <div className="invalid-feedback" key={index}>
+              {x}
+            </div>
+          ))}
       </div>
+
       <div className="col-md-4">
         <label htmlFor="phase" className="form-label">
           Fase
         </label>
         <select
           id="phase"
-          className={`form-select ${error.phase && 'is-invalid'}`}
+          className={`form-select ${errors.phase && 'is-invalid'}`}
           value={data.phase}
           onChange={handleOnChange}
         >
@@ -103,15 +131,21 @@ function RiskForm({ data, selectData, handleOnChange, error }) {
             </option>
           ))}
         </select>
-        {error.owner && <div className="invalid-feedback">{error.owner}</div>}
+        {errors.phase &&
+          errors.phase.map((x, index) => (
+            <div className="invalid-feedback" key={index}>
+              {x}
+            </div>
+          ))}
       </div>
+
       <div className="col-md-4">
         <label htmlFor="manageability" className="form-label">
           Manejabilidad
         </label>
         <select
           id="manageability"
-          className={`form-select ${error.manageability && 'is-invalid'}`}
+          className={`form-select ${errors.manageability && 'is-invalid'}`}
           value={data.manageability}
           onChange={handleOnChange}
         >
@@ -122,17 +156,21 @@ function RiskForm({ data, selectData, handleOnChange, error }) {
             </option>
           ))}
         </select>
-        {error.manageability && (
-          <div className="invalid-feedback">{error.manageability}</div>
-        )}
+        {errors.manageability &&
+          errors.manageability.map((x, index) => (
+            <div className="invalid-feedback" key={index}>
+              {x}
+            </div>
+          ))}
       </div>
+
       <div className="col-md-4">
         <label htmlFor="treatment" className="form-label">
           Tratamiento
         </label>
         <select
           id="treatment"
-          className={`form-select ${error.treatment && 'is-invalid'}`}
+          className={`form-select ${errors.treatment && 'is-invalid'}`}
           value={data.treatment}
           onChange={handleOnChange}
         >
@@ -143,10 +181,14 @@ function RiskForm({ data, selectData, handleOnChange, error }) {
             </option>
           ))}
         </select>
-        {error.treatment && (
-          <div className="invalid-feedback">{error.treatment}</div>
-        )}
+        {errors.treatment &&
+          errors.treatment.map((x, index) => (
+            <div className="invalid-feedback" key={index}>
+              {x}
+            </div>
+          ))}
       </div>
+
       <div className="col-md-6">
         <label htmlFor="dateFrom" className="form-label">
           Fecha inicial
@@ -154,14 +196,18 @@ function RiskForm({ data, selectData, handleOnChange, error }) {
         <input
           id="dateFrom"
           type="date"
-          className={`form-control ${error.dateFrom && 'is-invalid'}`}
+          className={`form-control ${errors.dateFrom && 'is-invalid'}`}
           value={data.dateFrom}
           onChange={handleOnChange}
         />
-        {error.dateFrom && (
-          <div className="invalid-feedback">{error.dateFrom}</div>
-        )}
+        {errors.dateFrom &&
+          errors.dateFrom.map((x, index) => (
+            <div className="invalid-feedback" key={index}>
+              {x}
+            </div>
+          ))}
       </div>
+
       <div className="col-md-6">
         <label htmlFor="dateTo" className="form-label">
           Fecha Final
@@ -169,12 +215,18 @@ function RiskForm({ data, selectData, handleOnChange, error }) {
         <input
           id="dateTo"
           type="date"
-          className={`form-control ${error.dateTo && 'is-invalid'}`}
+          className={`form-control ${errors.dateTo && 'is-invalid'}`}
           value={data.dateTo}
           onChange={handleOnChange}
         />
-        {error.dateTo && <div className="invalid-feedback">{error.dateTo}</div>}
+        {errors.dateTo &&
+          errors.dateTo.map((x, index) => (
+            <div className="invalid-feedback" key={index}>
+              {x}
+            </div>
+          ))}
       </div>
+
       <div className="mb-3 form-check">
         <input
           type="checkbox"

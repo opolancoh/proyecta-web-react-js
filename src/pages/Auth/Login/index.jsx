@@ -2,21 +2,25 @@ import { useState, useContext } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { login } from '../../../services/authService';
+import formValidation from './formValidation';
 
 const Login = () => {
-  const [formState, setformState] = useState({
-    username: '',
-    password: '',
-  });
+  const [data, setData] = useState({ username: '', password: '' });
   const [errors, setErrors] = useState({});
-
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const { loginContext } = useContext(AuthContext);
 
   const handleSubmit = async () => {
-    const { username, password } = formState;
+    const formErrors = formValidation(data);
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+      return;
+    }
+
+    // Send request
+    const { username, password } = data;
     const result = await login(username, password);
 
     if (result.success) {
@@ -30,11 +34,19 @@ const Login = () => {
   };
 
   const handleOnChange = (event) => {
-    const target = event.currentTarget;
-    setformState({
-      ...formState,
-      [target.id]: target.value,
-    });
+    const { id, value } = event.target;
+
+    setData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+
+    // Validate the specific field
+    const fieldError = formValidation({ [id]: value });
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [id]: fieldError[id],
+    }));
   };
 
   return (
@@ -59,9 +71,9 @@ const Login = () => {
           <input
             id="username"
             type="text"
-            className={`form-control ${errors.username ? 'is-invalid' : ''}`}
+            className={`form-control ${errors.username && 'is-invalid'}`}
             onChange={handleOnChange}
-            value={formState.username}
+            value={data.username}
           />
           {errors.username &&
             errors.username.map((x, index) => (
@@ -77,10 +89,10 @@ const Login = () => {
           </label>
           <input
             type="password"
-            className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+            className={`form-control ${errors.password && 'is-invalid'}`}
             id="password"
             onChange={handleOnChange}
-            value={formState.password}
+            value={data.password}
           />
           {errors.password &&
             errors.password.map((x, index) => (

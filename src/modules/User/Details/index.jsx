@@ -36,7 +36,6 @@ function UserDetails() {
   }
 
   if (requestHasError) {
-    console.log('requestHasError');
     navigate('/error');
     return null;
   }
