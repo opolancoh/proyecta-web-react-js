@@ -9,21 +9,45 @@ const httpClient = axios.create({
   },
 });
 
-// Helper function to perform token refresh
 const refreshAccessTokenHandler = async (accessToken, refreshToken) => {
   try {
     const result = await refreshAccessToken(accessToken, refreshToken);
     return result.data.accessToken;
   } catch (error) {
-    console.log(`[refreshAccessToken] Failed to refresh token. ${error}`);
+    console.error(`[refreshAccessToken] Failed to refresh token: ${error}`);
     return null;
   }
 };
 
-// Axios request interceptor
+const redirectToLogin = (returnUrl) => {
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('refresh_token');
+  window.location = `/login?returnUrl=${encodeURIComponent(returnUrl)}`;
+};
+
+const handleTokenRefresh = async (originalRequest) => {
+  const refreshToken = localStorage.getItem('refresh_token');
+  const accessToken = localStorage.getItem('access_token');
+
+  if (accessToken && refreshToken) {
+    const newAccessToken = await refreshAccessTokenHandler(accessToken, refreshToken);
+    if (newAccessToken) {
+      localStorage.setItem('access_token', newAccessToken);
+      originalRequest._retry = true;
+      originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+      return httpClient(originalRequest);
+    } else {
+      console.error('[httpClient.interceptors.response] Token refresh failed, redirecting to login');
+      redirectToLogin(originalRequest.lastRequestLocation || '/');
+    }
+  } else {
+    console.error('[httpClient.interceptors.response] No refresh token available, redirecting to login');
+    redirectToLogin(originalRequest.lastRequestLocation || '/');
+  }
+};
+
 httpClient.interceptors.request.use(
   (config) => {
-    // Add current location
     config.lastRequestLocation = window.location.pathname;
 
     const token = localStorage.getItem('access_token');
@@ -33,78 +57,42 @@ httpClient.interceptors.request.use(
 
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Axios response interceptor
 httpClient.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 400) {
-      // Continue in the React component for 400 status
-      return Promise.reject(error);
-    }
-    // Handle a 401 status code and try to get a new token
-    else if (
-      error.response &&
-      error.response.status === 401 &&
-      !originalRequest._retry
-    ) {
-      const refreshToken = localStorage.getItem('refresh_token');
-      const accessToken = localStorage.getItem('access_token');
-      if (accessToken && refreshToken) {
-        const newAccessToken = await refreshAccessTokenHandler(
-          accessToken,
-          refreshToken
-        );
-        if (newAccessToken) {
-          localStorage.setItem('access_token', newAccessToken);
-          originalRequest._retry = true;
-          originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-          return httpClient(originalRequest); // Retry the original request with new token
-        } else {
-          // Token refresh failed, redirect to login
-          console.log(
-            `[httpClient.interceptors.response] Error: Token refresh failed, redirect to login`
-          );
-          localStorage.removeItem('access_token');
-          localStorage.removeItem('refresh_token');
-          const returnUrl = originalRequest.lastRequestLocation || '/';
-          window.location = `/login?returnUrl=${encodeURIComponent(returnUrl)}`;
-          return Promise.reject(error);
-        }
-      } else {
-        // No refresh token, redirect to login
-        console.log(
-          `[httpClient.interceptors.response] Error: No refresh token, redirect to login`
-        );
-        const returnUrl = originalRequest.lastRequestLocation || '/';
-        window.location = `/login?returnUrl=${encodeURIComponent(returnUrl)}`;
+
+    if (error.response) {
+      const { status } = error.response;
+
+      if (status === 400) {
+        // Handle 400 error status
         return Promise.reject(error);
       }
-    } else if (
-      error.response &&
-      error.response.status === 401 &&
-      originalRequest._retry
-    ) {
-      // If the token was already refreshed and still getting 401
-      // const returnUrl = originalRequest.lastRequestLocation || '/';
-      // window.location = `/login?returnUrl=${encodeURIComponent(returnUrl)}`;
+
+      if (status === 401) {
+        if (!originalRequest._retry) {
+          return handleTokenRefresh(originalRequest);
+        }
+        console.error('[httpClient.interceptors.response] Token refresh did not resolve 401 error');
+        return Promise.reject(error);
+      }
+
+      if (status === 403) {
+        window.location = '/forbidden';
+        return Promise.reject(error);
+      }
+
+      console.error(`Request error: ${error}`);
+      window.location = '/error';
       return Promise.reject(error);
-    } else if (error.response && error.response.status === 403) {
-      window.location = `/forbidden`;
-    } else {
-      // Default error handler
-      // window.location.assign(`/error`);
-      console.log(`Request error: '${error}'`);
-      window.location = `/error`;
-      // return Promise.reject(error);
     }
+
+    console.error(`Request error without response: ${error}`);
+    return Promise.reject(error);
   }
 );
 

@@ -1,58 +1,59 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { getAll } from '../../services/userService.js';
-import MinimalActionToast from '../../components/contoso-university/MinimalActionToast/index.jsx';
-import Table from './Table/UserTable.jsx';
+import translations from '../../helpers/translations';
+import { getAll } from '../../services/userService';
+import EntityList from '../../components/contoso-university/entity/List/EntityList';
 
-import Loading from '../../components/contoso-university/Loading/index.jsx';
+const t = translations.es;
 
 export const entityPath = 'users';
 
 function UserIndex() {
-  const navigate = useNavigate();
-  const { state } = useLocation();
-  const [localState, setLocalState] = useState({ isLoading: true, data: [] });
-  const [notification, setNotification] = useState(null);
+  const columns = useMemo(
+    () => [
+      { label: 'Usuario' },
+      { label: 'Nombre' },
+      { label: 'Apellido' },
+      { label: 'Nombre a mostrar' },
+      { label: 'Roles' },
+    ],
+    []
+  );
 
-  useEffect(() => {
-    async function fetchData() {
-      const response = await getAll();
-      setLocalState({ isLoading: false, data: response.data });
-    }
-
-    if (state && state.notification) {
-      setNotification(state.notification);
-      navigate(location.pathname, { replace: true, state: null });
-    }
-    fetchData();
-  }, [navigate, state]);
-
-  const handleOnCloseNotification = () => {
-    setNotification(null);
-  };
-
-  const { isLoading, data } = localState;
-
-  if (isLoading) return <Loading />;
+  const renderRow = useCallback(
+    (item) => (
+      <tr key={item.id}>
+        <th scope="row">{item.userName}</th>
+        <td>{item.firstName}</td>
+        <td>{item.lastName}</td>
+        <td>{item.displayName}</td>
+        <td>
+          {item.roles.map((role) => (
+            <span key={role} className="badge text-bg-secondary me-1">
+              {role}
+            </span>
+          ))}
+        </td>
+        <td>
+          <div className="d-flex gap-2 mb-3">
+            <Link to={`/${entityPath}/${item.id}`}>Detalle</Link> |
+            <Link to={`/${entityPath}/${item.id}/edit`}>Editar</Link> |
+            <Link to={`/${entityPath}/${item.id}/remove`}>Eliminar</Link>
+          </div>
+        </td>
+      </tr>
+    ),
+    [t]
+  );
 
   return (
-    <>
-      <h1>Usuarios</h1>
-      <p>
-        <Link to={`/${entityPath}/new`}>Crear Nuevo</Link>
-      </p>
-
-      <Table entityPath={entityPath} data={data} isLoading={isLoading} />
-
-      {notification && (
-        <MinimalActionToast
-          action={notification.action}
-          message={notification.message}
-          onClose={handleOnCloseNotification}
-        />
-      )}
-    </>
+    <EntityList
+      entityName="Usuarios"
+      entityPath={entityPath}
+      fetchDataFunction={getAll}
+      columns={columns}
+      renderRow={renderRow}
+    />
   );
 }
 

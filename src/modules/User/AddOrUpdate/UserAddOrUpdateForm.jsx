@@ -1,7 +1,3 @@
-// import translations from '../../../helpers/translations';
-
-// const t = translations.es;
-
 function UserAddOrUpdateForm({ isEditMode, data = {}, errors = {}, onChangeHandler }) {
   return (
     <>

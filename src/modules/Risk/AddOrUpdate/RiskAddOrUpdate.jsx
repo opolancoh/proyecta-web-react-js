@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import EntityAddOrUpdate from '../../../components/contoso-university/entity/AddOrUpdate/EntityAddOrUpdate';
 import { add, update, getById } from '../../../services/riskService';
@@ -43,51 +43,51 @@ function RiskAddOrUpdate() {
   const [errors, setErrors] = useState({});
   const [notification, setNotification] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [categoryResponse, ownerResponse, treatmentResponse] = await Promise.all([
-          getAllCategories(),
-          getAllOwners(),
-          getAllTreatments(),
-        ]);
+  const fetchData = useCallback(async () => {
+    try {
+      const [categoryResponse, ownerResponse, treatmentResponse] = await Promise.all([
+        getAllCategories(),
+        getAllOwners(),
+        getAllTreatments(),
+      ]);
 
-        if (entityId) {
-          const { data } = await getById(entityId);
-          setData({
-            name: data.name,
-            code: data.code,
-            category: data.category.id,
-            type: data.type,
-            owner: data.owner.id,
-            phase: data.phase,
-            manageability: data.manageability,
-            treatment: data.treatment.id,
-            dateFrom: data.dateFrom,
-            dateTo: data.dateTo,
-            state: data.state,
-          });
-        }
-
-        setControlsData((prevState) => ({
-          ...prevState,
-          categories: categoryResponse.data,
-          owners: ownerResponse.data,
-          treatments: treatmentResponse.data,
-        }));
-      } catch (error) {
-        setNotification({ action: 'error', message: 'Failed to fetch data.' });
-      } finally {
-        setIsLoading(false);
+      if (entityId) {
+        const { data } = await getById(entityId);
+        setData({
+          name: data.name,
+          code: data.code,
+          category: data.category.id,
+          type: data.type,
+          owner: data.owner.id,
+          phase: data.phase,
+          manageability: data.manageability,
+          treatment: data.treatment.id,
+          dateFrom: data.dateFrom,
+          dateTo: data.dateTo,
+          state: data.state,
+        });
       }
-    };
 
-    fetchData();
+      setControlsData((prevState) => ({
+        ...prevState,
+        categories: categoryResponse.data,
+        owners: ownerResponse.data,
+        treatments: treatmentResponse.data,
+      }));
+    } catch (error) {
+      setNotification({ action: 'error', message: 'Failed to fetch data.' });
+    } finally {
+      setIsLoading(false);
+    }
   }, [entityId]);
 
-  const isEditMode = entityId != null && entityId !== '';
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
-  const handleOnChange = (event) => {
+  const isEditMode = Boolean(entityId);
+
+  const handleOnChange = useCallback((event) => {
     const { id, value, type, checked } = event.target;
     const newValue = type === 'checkbox' ? checked : value;
     setData((prevData) => ({
@@ -101,9 +101,9 @@ function RiskAddOrUpdate() {
       ...prevErrors,
       [id]: fieldError[id],
     }));
-  };
+  }, []);
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     const formErrors = formValidator(data);
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
@@ -128,20 +128,20 @@ function RiskAddOrUpdate() {
     } catch (error) {
       handleApiError(error);
     }
-  };
+  }, [data, entityId, navigate]);
 
-  const handleApiError = (error) => {
+  const handleApiError = useCallback((error) => {
     const { response } = error;
     const errorMessage = response?.data?.message || 'An error occurred';
     const errorDetails = response?.data?.errors || {};
 
     setNotification({ action: 'error', message: errorMessage });
     setErrors(errorDetails);
-  };
+  }, []);
 
-  const handleOnCloseNotification = () => {
+  const handleOnCloseNotification = useCallback(() => {
     setNotification(null);
-  };
+  }, []);
 
   return (
     <>

@@ -47,13 +47,13 @@ function RiskList() {
         </td>
       </tr>
     ),
-    []
+    [t]
   );
 
   return (
     <EntityList
       entityName="Riesgos"
-      entityPath="risks"
+      entityPath={entityPath}
       fetchDataFunction={getAll}
       columns={columns}
       renderRow={renderRow}

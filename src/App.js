@@ -1,7 +1,6 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-
 import NotFound from './pages/NotFound';
 import Header from './components/contoso-university/Header';
 import Footer from './components/contoso-university/Footer';
@@ -32,28 +31,32 @@ function App() {
           <main role="main" className="pb-3">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/risks">
+              <Route path="risks">
                 <Route index element={<RiskIndex />} />
                 <Route path="new" element={<RiskAddOrUpdate />} />
-                <Route path=":entityId" element={<RiskDetails />} />
-                <Route path=":entityId/edit" element={<RiskAddOrUpdate />} />
-                <Route path=":entityId/remove" element={<RiskRemove />} />
+                <Route path=":entityId">
+                  <Route index element={<RiskDetails />} />
+                  <Route path="edit" element={<RiskAddOrUpdate />} />
+                  <Route path="remove" element={<RiskRemove />} />
+                </Route>
               </Route>
-              <Route path="/users">
+              <Route path="users">
                 <Route index element={<UserIndex />} />
                 <Route path="new" element={<UserAddOrUpdate />} />
-                <Route path=":entityId" element={<UserDetails />} />
-                <Route path=":entityId/edit" element={<UserAddOrUpdate />} />
-                <Route path=":entityId/remove" element={<UserRemove />} />
+                <Route path=":entityId">
+                  <Route index element={<UserDetails />} />
+                  <Route path="edit" element={<UserAddOrUpdate />} />
+                  <Route path="remove" element={<UserRemove />} />
+                </Route>
               </Route>
-              <Route path="/register" element={<Register />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/app-info" element={<AppInfo />} />
-              <Route path="/api-server-info" element={<ApiServerInfo />} />
-              <Route path="/api-system-info" element={<ApiSystemInfo />} />
-              <Route path="/error" element={<Error />} />
-              <Route path="/forbidden" element={<Forbidden />} />
+              <Route path="register" element={<Register />} />
+              <Route path="login" element={<Login />} />
+              <Route path="about" element={<About />} />
+              <Route path="app-info" element={<AppInfo />} />
+              <Route path="api-server-info" element={<ApiServerInfo />} />
+              <Route path="api-system-info" element={<ApiSystemInfo />} />
+              <Route path="error" element={<Error />} />
+              <Route path="forbidden" element={<Forbidden />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

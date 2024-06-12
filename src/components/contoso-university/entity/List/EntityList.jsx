@@ -33,7 +33,7 @@ function EntityList({ entityPluralName, entityPath, columns, renderRow, fetchDat
     };
 
     if (locationState?.notification) {
-      setNotification(locationState.notification);
+      setNotification(locationState?.notification);
       navigate(location.pathname, { replace: true, state: null });
     }
 
@@ -42,7 +42,7 @@ function EntityList({ entityPluralName, entityPath, columns, renderRow, fetchDat
     return () => {
       isMounted = false;
     };
-  }, [navigate, locationState.notification, fetchDataFunction]);
+  }, [navigate, locationState?.notification, fetchDataFunction]);
 
   const handleOnCloseNotification = () => {
     setNotification(null);

@@ -16,9 +16,7 @@ function EntityAddOrUpdate({ entityName, entityPath, isEditMode, isLoading, subm
       ) : (
         <>
           {children}
-
-          <br />
-          <div className="row">
+          <div className="row mt-4">
             <div className="col-md-2">
               <button className="btn btn-primary" onClick={submitHandler}>
                 Guardar

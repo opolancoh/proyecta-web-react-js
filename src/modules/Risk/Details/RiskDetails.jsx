@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import translations from '../../../helpers/translations';
 import { getById } from '../../../services/riskService';
@@ -13,15 +13,29 @@ function RiskDetails() {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchData() {
+  const fetchData = useCallback(async () => {
+    try {
       const response = await getById(entityId);
       setData(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
       setIsLoading(false);
     }
-
-    fetchData();
   }, [entityId]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const renderDataField = (label, value) => (
+    <div className="col">
+      <div className="d-block">
+        <strong className="d-block h5 mb-0">{label}</strong>
+        <span className="text-secondary">{value}</span>
+      </div>
+    </div>
+  );
 
   return (
     <EntityDetailsCustom
@@ -29,78 +43,32 @@ function RiskDetails() {
       entityPath={entityPath}
       entityId={entityId}
       createdText={
-        data.createdAt && data.createdBy ? `${dateToLocaleString(data.createdAt)} por ${data.createdBy.name}` : ''
+        data.createdAt && data.createdBy
+          ? `${dateToLocaleString(data.createdAt)} por ${data.createdBy.name}`
+          : ''
       }
       updatedText={
-        data.updatedAt && data.updatedBy ? `${dateToLocaleString(data.updatedAt)} por ${data.updatedBy.name}` : ''
+        data.updatedAt && data.updatedBy
+          ? `${dateToLocaleString(data.updatedAt)} por ${data.updatedBy.name}`
+          : ''
       }
       isLoading={isLoading}
     >
       <div className="row mb-3">
-        <div className="col">
-          <div className="d-block">
-            <strong className="d-block h5 mb-0">Nombre</strong>
-            <span className="text-secondary">{data.name}</span>
-          </div>
-        </div>
-        <div className="col">
-          <div className="d-block">
-            <strong className="d-block h5 mb-0">Código</strong>
-            <span className="text-secondary">{data.code}</span>
-          </div>
-        </div>
-        <div className="col">
-          <div className="d-block">
-            <strong className="d-block h5 mb-0">Categoría</strong>
-            <span className="text-secondary">{data.category?.name}</span>
-          </div>
-        </div>
-        <div className="col">
-          <div className="d-block">
-            <strong className="d-block h5 mb-0">Tipo</strong>
-            <span className="text-secondary">{t.riskType[data.type]}</span>
-          </div>
-        </div>
+        {renderDataField('Nombre', data.name)}
+        {renderDataField('Código', data.code)}
+        {renderDataField('Categoría', data.category?.name)}
+        {renderDataField('Tipo', t.riskType[data.type])}
       </div>
       <div className="row mb-3">
-        <div className="col">
-          <div className="d-block">
-            <strong className="d-block h5 mb-0">Dueño</strong>
-            <span className="text-secondary">{data.owner?.name}</span>
-          </div>
-        </div>
-        <div className="col">
-          <div className="d-block">
-            <strong className="d-block h5 mb-0">Fase</strong>
-            <span className="text-secondary">{t.riskPhase[data.phase]}</span>
-          </div>
-        </div>
-        <div className="col">
-          <div className="d-block">
-            <strong className="d-block h5 mb-0">Manejabilidad</strong>
-            <span className="text-secondary">{t.riskManageability[data.manageability]}</span>
-          </div>
-        </div>
-        <div className="col">
-          <div className="d-block">
-            <strong className="d-block h5 mb-0">Tratamiento</strong>
-            <span className="text-secondary">{data.treatment?.name}</span>
-          </div>
-        </div>
+        {renderDataField('Dueño', data.owner?.name)}
+        {renderDataField('Fase', t.riskPhase[data.phase])}
+        {renderDataField('Manejabilidad', t.riskManageability[data.manageability])}
+        {renderDataField('Tratamiento', data.treatment?.name)}
       </div>
       <div className="row mb-3">
-        <div className="col-3">
-          <div className="d-block">
-            <strong className="d-block h5 mb-0">Fecha inicial</strong>
-            <span className="text-secondary">{data.dateFrom}</span>
-          </div>
-        </div>
-        <div className="col-3">
-          <div className="d-block">
-            <strong className="d-block h5 mb-0">Fecha final</strong>
-            <span className="text-secondary">{data.dateTo}</span>
-          </div>
-        </div>
+        {renderDataField('Fecha inicial', data.dateFrom)}
+        {renderDataField('Fecha final', data.dateTo)}
         <div className="col-3">
           <div className="d-block">
             <strong className="d-block h5 mb-0">Estado</strong>

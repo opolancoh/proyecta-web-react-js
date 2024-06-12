@@ -25,7 +25,8 @@ const EntityDetails = ({ entityName, entityPath, getById, fields }) => {
       <h2>Detalle</h2>
       <h4>{entityName}</h4>
       <div className="d-flex gap-2 mb-3">
-        <Link to={`/${entityPath}/${entityId}/edit`}>Editar</Link> |<Link to={`/${entityPath}`}>Volver a la lista</Link>
+        <Link to={`/${entityPath}/${entityId}/edit`}>Editar</Link> |{' '}
+        <Link to={`/${entityPath}`}>Volver a la lista</Link>
       </div>
       <hr />
 
