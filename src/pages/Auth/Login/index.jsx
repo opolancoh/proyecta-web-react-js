@@ -3,12 +3,14 @@ import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { login } from '../../../services/authService';
 import formValidation from './formValidation';
+import MinimalActionToast from '../../../components/contoso-university/MinimalActionToast';
 
 const Login = () => {
   const [data, setData] = useState({ username: '', password: '' });
   const [errors, setErrors] = useState({});
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [notification, setNotification] = useState(null);
 
   const { loginContext } = useContext(AuthContext);
 
@@ -19,17 +21,20 @@ const Login = () => {
       return;
     }
 
-    // Send request
     const { username, password } = data;
-    const result = await login(username, password);
+    try {
+      const response = await login(username, password);
 
-    if (result.success) {
-      loginContext(result.data);
+      loginContext(response.data);
       let navigateUrl = searchParams.get('returnUrl');
       if (!navigateUrl) navigateUrl = '/';
       navigate(navigateUrl);
-    } else {
-      setErrors(result.errors);
+    } catch (error) {
+      if (error.response && error.response.errors) {
+        setErrors(error.response.errors);
+      } else {
+        setNotification({ action: 'error', message: error.response.message });
+      }
     }
   };
 
@@ -54,15 +59,6 @@ const Login = () => {
       <h1>Inicio de sesión</h1>
       <p>Usa tu cuenta.</p>
       <br />
-      {errors._ && (
-        <ul>
-          {errors._.map((x) => (
-            <li key={x} className="text-danger">
-              {x}
-            </li>
-          ))}
-        </ul>
-      )}
       <form>
         <div className="form-group">
           <label htmlFor="username" className="form-label">
@@ -120,6 +116,23 @@ const Login = () => {
 
       <br />
       <Link to="/register">Crear una cuenta</Link>
+
+      {errors._ && (
+        <ul>
+          {errors._.map((x) => (
+            <li key={x} className="text-danger">
+              {x}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {notification && (
+        <MinimalActionToast
+          action={notification.action}
+          message={notification.message}
+        />
+      )}
     </>
   );
 };

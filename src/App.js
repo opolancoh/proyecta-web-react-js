@@ -1,26 +1,27 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import RiskIndex from './modules/Risk';
-import RiskDetails from './modules/Risk/Details';
+
 import NotFound from './pages/NotFound';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Header from './components/contoso-university/Header';
+import Footer from './components/contoso-university/Footer';
 import About from './pages/About';
 import AppInfo from './pages/InformationApp';
 import ApiServerInfo from './pages/InformationApiServer';
 import ApiSystemInfo from './pages/InformationApiSystem';
 import Error from './pages/Error';
-import UserIndex from './modules/User';
+import UserIndex from './modules/User/UserIndex';
 import Register from './pages/Auth/Register';
 import Login from './pages/Auth/Login';
 import { AuthProvider } from './contexts/AuthContext';
 import Forbidden from './pages/Forbidden';
-import UserDetails from './modules/User/Details';
-import UserAddOrUpdate from './modules/User/AddOrUpdate';
-import UserRemove from './modules/User/Remove';
-import RiskAddOrUpdate from './modules/Risk/AddOrUpdate';
-import RiskRemove from './modules/Risk/Remove';
+import UserDetails from './modules/User/Details/UserDetails';
+import UserAddOrUpdate from './modules/User/AddOrUpdate/UserAddOrUpdate';
+import UserRemove from './modules/User/Remove/UserRemove';
+import RiskIndex from './modules/Risk/RiskIndex';
+import RiskDetails from './modules/Risk/Details/RiskDetails';
+import RiskAddOrUpdate from './modules/Risk/AddOrUpdate/RiskAddOrUpdate';
+import RiskRemove from './modules/Risk/Remove/RiskRemove';
 
 function App() {
   return (
@@ -33,17 +34,17 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/risks">
                 <Route index element={<RiskIndex />} />
-                <Route path="new" element={<RiskAddOrUpdate />} /> 
+                <Route path="new" element={<RiskAddOrUpdate />} />
                 <Route path=":entityId" element={<RiskDetails />} />
-                <Route path=":entityId/edit" element={<RiskAddOrUpdate />} /> 
-                <Route path=":entityId/remove" element={<RiskRemove />} />   
+                <Route path=":entityId/edit" element={<RiskAddOrUpdate />} />
+                <Route path=":entityId/remove" element={<RiskRemove />} />
               </Route>
               <Route path="/users">
                 <Route index element={<UserIndex />} />
                 <Route path="new" element={<UserAddOrUpdate />} />
-                <Route path=":entityId" element={<UserDetails />} />    
-                <Route path=":entityId/edit" element={<UserAddOrUpdate />} />                            
-                <Route path=":entityId/remove" element={<UserRemove />} />                
+                <Route path=":entityId" element={<UserDetails />} />
+                <Route path=":entityId/edit" element={<UserAddOrUpdate />} />
+                <Route path=":entityId/remove" element={<UserRemove />} />
               </Route>
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />

@@ -1,4 +1,8 @@
-function RiskForm({ data, selectData, handleOnChange, errors }) {
+import translations from '../../../helpers/translations';
+
+const t = translations.es;
+
+function RiskAddOrUpdateForm({ data = {}, controlsData = [], errors = {}, onChangeHandler }) {
   return (
     <div className="row g-3">
       <div className="col-md-6">
@@ -10,7 +14,7 @@ function RiskForm({ data, selectData, handleOnChange, errors }) {
           type="text"
           className={`form-control ${errors.name && 'is-invalid'}`}
           value={data.name}
-          onChange={handleOnChange}
+          onChange={onChangeHandler}
         />
         {errors.name &&
           errors.name.map((x, index) => (
@@ -29,7 +33,7 @@ function RiskForm({ data, selectData, handleOnChange, errors }) {
           type="text"
           className={`form-control ${errors.code && 'is-invalid'}`}
           value={data.code}
-          onChange={handleOnChange}
+          onChange={onChangeHandler}
         />
         {errors.code &&
           errors.code.map((x, index) => (
@@ -47,10 +51,10 @@ function RiskForm({ data, selectData, handleOnChange, errors }) {
           id="category"
           className={`form-select ${errors.category && 'is-invalid'}`}
           value={data.category}
-          onChange={handleOnChange}
+          onChange={onChangeHandler}
         >
           <option>-- Seleccione una opción --</option>
-          {selectData.category.map((item) => (
+          {controlsData.categories.map((item) => (
             <option key={item.id} value={item.id}>
               {item.name}
             </option>
@@ -72,12 +76,12 @@ function RiskForm({ data, selectData, handleOnChange, errors }) {
           id="type"
           className={`form-select ${errors.type && 'is-invalid'}`}
           value={data.type}
-          onChange={handleOnChange}
+          onChange={onChangeHandler}
         >
           <option>-- Seleccione una opción --</option>
-          {selectData.type.map((item) => (
+          {controlsData.types.map((item) => (
             <option key={item.id} value={item.id}>
-              {item.name}
+              {t.riskType[item.id]}
             </option>
           ))}
         </select>
@@ -97,10 +101,10 @@ function RiskForm({ data, selectData, handleOnChange, errors }) {
           id="owner"
           className={`form-select ${errors.owner && 'is-invalid'}`}
           value={data.owner}
-          onChange={handleOnChange}
+          onChange={onChangeHandler}
         >
           <option>-- Seleccione una opción --</option>
-          {selectData.owner.map((item) => (
+          {controlsData.owners.map((item) => (
             <option key={item.id} value={item.id}>
               {item.name}
             </option>
@@ -122,12 +126,12 @@ function RiskForm({ data, selectData, handleOnChange, errors }) {
           id="phase"
           className={`form-select ${errors.phase && 'is-invalid'}`}
           value={data.phase}
-          onChange={handleOnChange}
+          onChange={onChangeHandler}
         >
           <option>-- Seleccione una opción --</option>
-          {selectData.phase.map((item) => (
+          {controlsData.phases.map((item) => (
             <option key={item.id} value={item.id}>
-              {item.name}
+              {t.riskPhase[item.id]}
             </option>
           ))}
         </select>
@@ -147,12 +151,12 @@ function RiskForm({ data, selectData, handleOnChange, errors }) {
           id="manageability"
           className={`form-select ${errors.manageability && 'is-invalid'}`}
           value={data.manageability}
-          onChange={handleOnChange}
+          onChange={onChangeHandler}
         >
           <option>-- Seleccione una opción --</option>
-          {selectData.manageability.map((item) => (
+          {controlsData.manageabilities.map((item) => (
             <option key={item.id} value={item.id}>
-              {item.name}
+              {t.riskManageability[item.id]}
             </option>
           ))}
         </select>
@@ -172,10 +176,10 @@ function RiskForm({ data, selectData, handleOnChange, errors }) {
           id="treatment"
           className={`form-select ${errors.treatment && 'is-invalid'}`}
           value={data.treatment}
-          onChange={handleOnChange}
+          onChange={onChangeHandler}
         >
           <option>-- Seleccione una opción --</option>
-          {selectData.treatment.map((item) => (
+          {controlsData.treatments.map((item) => (
             <option key={item.id} value={item.id}>
               {item.name}
             </option>
@@ -198,7 +202,7 @@ function RiskForm({ data, selectData, handleOnChange, errors }) {
           type="date"
           className={`form-control ${errors.dateFrom && 'is-invalid'}`}
           value={data.dateFrom}
-          onChange={handleOnChange}
+          onChange={onChangeHandler}
         />
         {errors.dateFrom &&
           errors.dateFrom.map((x, index) => (
@@ -217,7 +221,7 @@ function RiskForm({ data, selectData, handleOnChange, errors }) {
           type="date"
           className={`form-control ${errors.dateTo && 'is-invalid'}`}
           value={data.dateTo}
-          onChange={handleOnChange}
+          onChange={onChangeHandler}
         />
         {errors.dateTo &&
           errors.dateTo.map((x, index) => (
@@ -233,7 +237,7 @@ function RiskForm({ data, selectData, handleOnChange, errors }) {
           className="form-check-input"
           id="state"
           checked={data.state}
-          onChange={handleOnChange}
+          onChange={onChangeHandler}
         />
         <label className="form-check-label" htmlFor="state">
           Estado
@@ -243,4 +247,4 @@ function RiskForm({ data, selectData, handleOnChange, errors }) {
   );
 }
 
-export default RiskForm;
+export default RiskAddOrUpdateForm;

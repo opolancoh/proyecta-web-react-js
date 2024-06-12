@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getSystemInfo } from '../../services/apiInformationService';
-import InfoPage from '../../components/InfoPage';
-import Loading from '../../components/Loading';
+import InfoPage from '../../components/contoso-university/InfoPage';
+import Loading from '../../components/contoso-university/Loading';
 
 function ApiServerInfo() {
   const [data, setData] = useState({});

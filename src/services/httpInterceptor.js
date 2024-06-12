@@ -45,8 +45,12 @@ httpClient.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
+    if (error.response.status === 400) {
+      // Continue in the React component for 400 status
+      return Promise.reject(error);
+    }
     // Handle a 401 status code and try to get a new token
-    if (
+    else if (
       error.response &&
       error.response.status === 401 &&
       !originalRequest._retry

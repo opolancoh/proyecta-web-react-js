@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../../../services/authService';
-import Loading from '../../../components/Loading';
+import Loading from '../../../components/contoso-university/Loading';
 import formValidation from './formValidation';
 import { AuthContext } from '../../../contexts/AuthContext';
 

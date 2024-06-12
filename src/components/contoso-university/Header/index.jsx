@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../contexts/AuthContext';
-import { logout } from '../../services/authService';
+import { AuthContext } from '../../../contexts/AuthContext';
+import { logout } from '../../../services/authService';
 
 function Header() {
   const navigate = useNavigate();

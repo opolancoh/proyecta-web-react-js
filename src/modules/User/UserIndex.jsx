@@ -2,31 +2,23 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getAll } from '../../services/userService.js';
-import MinimalActionToast from '../../components/MinimalActionToast';
-import Table from './Table';
+import MinimalActionToast from '../../components/contoso-university/MinimalActionToast/index.jsx';
+import Table from './Table/UserTable.jsx';
 
-import Loading from '../../components/Loading';
+import Loading from '../../components/contoso-university/Loading/index.jsx';
 
 export const entityPath = 'users';
 
 function UserIndex() {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [requestHasError, setRequestHasError] = useState(false);
+  const [localState, setLocalState] = useState({ isLoading: true, data: [] });
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
-      const result = await getAll();
-      if (result.success) {
-        setData(result.data);
-      } else if (result.code === '404') setData(null);
-      else {
-        setRequestHasError(true);
-      }
-      setIsLoading(false);
+      const response = await getAll();
+      setLocalState({ isLoading: false, data: response.data });
     }
 
     if (state && state.notification) {
@@ -40,12 +32,9 @@ function UserIndex() {
     setNotification(null);
   };
 
-  if (isLoading) return <Loading />;
+  const { isLoading, data } = localState;
 
-  if (requestHasError) {
-    navigate('/error');
-    return null;
-  }
+  if (isLoading) return <Loading />;
 
   return (
     <>
@@ -56,13 +45,13 @@ function UserIndex() {
 
       <Table entityPath={entityPath} data={data} isLoading={isLoading} />
 
-      {notification !== null ? (
+      {notification && (
         <MinimalActionToast
           action={notification.action}
           message={notification.message}
           onClose={handleOnCloseNotification}
         />
-      ) : null}
+      )}
     </>
   );
 }
